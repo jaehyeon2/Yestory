@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+  <property resource="logback.properties" />
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- encoders are assigned the type
+         ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="project_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<file>${tomcat.home}/logs/shallwe.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		<!-- daily rollover -->
+		<fileNamePattern>${tomcat.home}/logs/shallwe.log.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		<!-- keep 180 days' worth of history -->
+		<maxHistory>180</maxHistory>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+		<charset>UTF-8</charset>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</layout>
+    </encoder>
+  </appender>
+
+  <root>
+  	<level value="${project.debug.level}" />
+	<appender-ref ref="${project.appender.name}" />
+  </root>
+
+</configuration>
