@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+	<!-- <bean id="cipherUtility" class="io.utility.security.CipherUtility" scope="singleton">
+		<constructor-arg value="${security.cipher.pwd}"/>
+	</bean>
+	
+	<bean id="ID" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${email.account.id}"/>
+	</bean>
+	
+	<bean id="PW" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${email.account.pwd}"/>
+	</bean>
+	
+	<bean id="SMTPHOST" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${email.smtp.host}"/>
+	</bean>
+	
+	<bean id="PORT" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${email.smtp.port}"/>
+	</bean>
+	
+	<bean id="SENDER" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${email.emailer.sender}"/>
+	</bean> -->
+	
+	<bean id="NAVER_CLIENT_ID" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.datalab.trend.api.cliendId}"/>
+	</bean>
+	
+	<bean id="NAVER_CLIENT_SECRET" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.datalab.trend.api.cliendSecret}"/>
+	</bean>
+	
+</beans>
