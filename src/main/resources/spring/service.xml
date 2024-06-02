@@ -55,4 +55,8 @@
 		<constructor-arg value="${google.trend.file.name.head}"/>
 	</bean>
 	
+	<bean id="GOOGLE_TREND_PYTHON_FILE_PATH" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${google.trend.python.file.path}"/>
+	</bean>
+	
 </beans>
