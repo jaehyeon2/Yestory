@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.NewsModel;
 import com.example.project.service.CrawlingService;
 
 @Service
@@ -94,5 +95,13 @@ public class CrawlingServiceImpl implements CrawlingService{
 	    
 	    return trendList;
 	}
+
+	@Override
+	public List<NewsModel> crawlingNaverSearchNews() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }
