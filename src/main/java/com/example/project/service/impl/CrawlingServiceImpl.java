@@ -2,13 +2,16 @@ package com.example.project.service.impl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +36,8 @@ public class CrawlingServiceImpl implements CrawlingService{
 	
 	@Override
 	public List<String> crawlGoogleSearchTrendList() throws Exception {
-	    List<String> trendList = new ArrayList<>();
+	    
+		List<String> trendList = new ArrayList<>();
 	    
 	    try {
 	        String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
@@ -49,8 +53,8 @@ public class CrawlingServiceImpl implements CrawlingService{
 	        
 	        this.generateTrendToCsv(filePath);
 	        trendList = this.getTrendListFromCsv(filePath);
-	        for (String trend:trendList){
-	        	logger.info("trend = {}", trend);
+	        for (String keyword:trendList){
+	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
 	        }
 	        
 	    } catch (Exception e) {
@@ -86,7 +90,7 @@ public class CrawlingServiceImpl implements CrawlingService{
 	    
 	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
 	        String line;
-	        // initial line skip
+	        // skip initial line
 	        line = br.readLine();
 	        while ((line = br.readLine()) != null) {
 	            trendList.add(line);
@@ -97,8 +101,33 @@ public class CrawlingServiceImpl implements CrawlingService{
 	}
 
 	@Override
-	public List<NewsModel> crawlingNaverSearchNews() throws Exception {
-		// TODO Auto-generated method stub
+	public List<NewsModel> crawlingNaverSearchNewsLink(String keyword) throws Exception {
+		
+		List<NewsModel> newsList = new ArrayList<>();
+		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+		try{
+		for (int pageNum=1; pageNum<=10; pageNum++){
+			StringBuilder sbUrl = new StringBuilder();
+			sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
+				.append("&start=").append(pageNum)
+				.append("&ds=").append(yesterdayString)
+				.append("&de=").append(todayString);
+			String url = sbUrl.toString();
+			
+			// TODO: crawling news page error sb
+			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
+			Document doc = Jsoup.connect(url).get();
+			
+//			Elements linkElements = doc.select("a[href*=news.naver]");
+			System.out.println(doc.html());
+			
+		}
+		} catch(Exception e){
+			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
+		}
+		
+		
 		return null;
 	}
 	

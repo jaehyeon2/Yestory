@@ -8,6 +8,6 @@ public interface CrawlingService {
 	
 	public List<String> crawlGoogleSearchTrendList() throws Exception;
 	
-	public List<NewsModel> crawlingNaverSearchNews() throws Exception;
+	public List<NewsModel> crawlingNaverSearchNewsLink(String keyword) throws Exception;
 	
 }
