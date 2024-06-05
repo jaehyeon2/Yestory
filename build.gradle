@@ -41,6 +41,8 @@ ext {
 	tomcatVersion = '9.0.68'
 	
 	jsoupVersion = '1.15.3'
+	
+	jsonVersion = '20210307'
 }
 
 dependencies {
@@ -59,8 +61,8 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-core:' + springSecrityVersion
 
 	implementation 'org.jsoup:jsoup:' + jsoupVersion
-	implementation 'org.seleniumhq.selenium:selenium-java:4.1.2'
-    implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.1.2'
+	
+	implementation 'org.json:json:' + jsonVersion
 	
 	//implementation 'org.apache.commons:commons-dbcp2:2.9.0'
 	//implementation 'org.apache.commons:commons-pool2:2.11.1'

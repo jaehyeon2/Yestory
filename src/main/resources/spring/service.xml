@@ -35,13 +35,17 @@
 		<constructor-arg value="${email.emailer.sender}"/>
 	</bean> -->
 	
-	<!-- <bean id="NAVER_CLIENT_ID" class="java.lang.String" scope="singleton">
+	<bean id="NAVER_CLIENT_ID" class="java.lang.String" scope="singleton">
 		<constructor-arg value="${naver.datalab.trend.api.cliendId}"/>
 	</bean>
 	
 	<bean id="NAVER_CLIENT_SECRET" class="java.lang.String" scope="singleton">
 		<constructor-arg value="${naver.datalab.trend.api.cliendSecret}"/>
-	</bean>-->
+	</bean>
+	
+	<bean id="NAVER_DATALAB_API_URL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.datalab.trend.api.url}"/>
+	</bean>
 	
 	<bean id="GOOGLE_TREND_URL" class="java.lang.String" scope="singleton">
 		<constructor-arg value="${google.trend.url}"/>

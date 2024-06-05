@@ -3,15 +3,16 @@ package com.example.project.service.impl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,15 @@ public class CrawlingServiceImpl implements CrawlingService{
 	@Autowired
 	private String GOOGLE_TREND_PYTHON_FILE_PATH;
 	
+	@Autowired
+	private String NAVER_CLIENT_ID;
+	
+	@Autowired
+	private String NAVER_CLIENT_SECRET;
+	
+	@Autowired
+    private String NAVER_DATALAB_API_URL;
+	
 	@Override
 	public List<String> crawlGoogleSearchTrendList() throws Exception {
 	    
@@ -54,7 +64,7 @@ public class CrawlingServiceImpl implements CrawlingService{
 	        this.generateTrendToCsv(filePath);
 	        trendList = this.getTrendListFromCsv(filePath);
 	        for (String keyword:trendList){
-	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
+	        	List<NewsModel> newsListByKeyword = getNaverDatalabTrend(keyword);
 	        }
 	        
 	    } catch (Exception e) {
@@ -101,31 +111,61 @@ public class CrawlingServiceImpl implements CrawlingService{
 	}
 
 	@Override
-	public List<NewsModel> crawlingNaverSearchNewsLink(String keyword) throws Exception {
+	public List<NewsModel> getNaverDatalabTrend(String keyword) throws Exception {
 		
 		List<NewsModel> newsList = new ArrayList<>();
-		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-		try{
-		for (int pageNum=1; pageNum<=10; pageNum++){
-			StringBuilder sbUrl = new StringBuilder();
-			sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
-				.append("&start=").append(pageNum)
-				.append("&ds=").append(yesterdayString)
-				.append("&de=").append(todayString);
-			String url = sbUrl.toString();
-			
-			// TODO: crawling news page error sb
-			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
-			Document doc = Jsoup.connect(url).get();
-			
-//			Elements linkElements = doc.select("a[href*=news.naver]");
-			System.out.println(doc.html());
-			
-		}
-		} catch(Exception e){
-			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
-		}
+		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		try {
+            // Create URL object
+            URL url = new URL(NAVER_DATALAB_API_URL);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            
+            // Set request method to POST
+            con.setRequestMethod("POST");
+            con.setRequestProperty("X-Naver-Client-Id", NAVER_CLIENT_ID);
+            con.setRequestProperty("X-Naver-Client-Secret", NAVER_CLIENT_SECRET);
+            con.setRequestProperty("Content-Type", "application/json");
+
+            // Create JSON body
+            JSONObject body = new JSONObject();
+            body.put("startDate", yesterdayString);
+            body.put("endDate", todayString);
+            body.put("timeUnit", "date");
+            JSONArray keywordGroups = new JSONArray();
+            JSONObject keywordGroup = new JSONObject();
+            keywordGroup.put("groupName", keyword);
+            keywordGroup.put("keywords", new JSONArray().put(keyword));
+            keywordGroups.put(keywordGroup);
+            body.put("keywordGroups", keywordGroups);
+
+            // Send POST request
+            con.setDoOutput(true);
+            OutputStream os = con.getOutputStream();
+            os.write(body.toString().getBytes("UTF-8"));
+            os.flush();
+            os.close();
+
+            // Read response
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Print result
+                System.out.println(response.toString());
+            } else {
+                System.out.println("Error: " + responseCode);
+            }
+
+        } catch (Exception e) {
+            logger.error("CrawlingServiceImpl::getNaverDatalabTrend::Error = {}", e.getMessage());
+        }
 		
 		
 		return null;
