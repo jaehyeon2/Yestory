@@ -13,10 +13,10 @@
   </appender>
 
   <appender name="project_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-	<file>${tomcat.home}/logs/shallwe.log</file>
+	<file>${tomcat.home}/logs/yestory.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 		<!-- daily rollover -->
-		<fileNamePattern>${tomcat.home}/logs/shallwe.log.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+		<fileNamePattern>${tomcat.home}/logs/yestory.log.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
 		<!-- keep 180 days' worth of history -->
 		<maxHistory>180</maxHistory>
     </rollingPolicy>

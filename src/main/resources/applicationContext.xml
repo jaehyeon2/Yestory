@@ -17,10 +17,10 @@
 	<!-- Set the base package -->
 	<context:component-scan base-package="com.example.project" />
 
-	<!-- Include the core spring -->
+	<!-- Include the core service -->
 	
-	<import resource="classpath:spring/gpt.xml"/>
-	<import resource="classpath:spring/service.xml"/>
+	<import resource="classpath:service/kakao.xml"/>
+	<import resource="classpath:service/google.xml"/>
 	
 	<!-- Users -->
 	

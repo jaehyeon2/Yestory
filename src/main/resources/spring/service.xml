@@ -55,4 +55,8 @@
 		<constructor-arg value="${kakao.api.key}"/>
 	</bean>
 	
+	<bean id="KAKAO_API_ENDPOINT_URL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${kakao.api.endpoint.url}"/>
+	</bean>
+	
 </beans>

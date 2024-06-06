@@ -3,6 +3,9 @@ package com.example.project.service.impl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -36,6 +39,12 @@ public class CrawlingServiceImpl implements CrawlingService{
 	
 	@Autowired
 	private String GOOGLE_TREND_PYTHON_FILE_PATH;
+	
+	@Autowired
+	private String KAKAO_API_KEY;
+	
+	@Autowired
+	private String KAKAO_API_ENDPOINT_URL;
 	
 	@Override
 	public List<String> crawlGoogleSearchTrendList() throws Exception {
@@ -112,43 +121,39 @@ public class CrawlingServiceImpl implements CrawlingService{
 		List<NewsModel> newsList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-		try{
-			for (int pageNum=1; pageNum<=2; pageNum++){
-				StringBuilder sbUrl = new StringBuilder();
-				sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
-					.append("&start=").append(pageNum)
-					.append("&ds=").append(yesterdayString)
-					.append("&de=").append(todayString);
-				String url = sbUrl.toString();
-	
-				
-				Connection connection = Jsoup.connect(url)
-                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-                        .timeout(10000); // 타임아웃 설정
-
-				// 요청 간 타임 딜레이 추가
-				Thread.sleep(1000);
-				// TODO: crawling news page error sb
-				logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
-	            Document doc = connection.get();
-	
-	            Elements linkElements = doc.select("a[href]");
-	            for (Element linkElement : linkElements) {
-                    String newsUrl = linkElement.attr("href");
-                    if (newsUrl.contains("https")) {
-                    	logger.info("url = {}", newsUrl);
-                        // 뉴스 모델에 추가하는 로직
-                        NewsModel news = new NewsModel();
-                        news.setnUrl(newsUrl);
-                        newsList.add(news);
-                    }
-//                    logger.info("url = {}", newsUrl);
-                }
-	            
-	
+		try {
+            
+			// 키워드 인코딩
+			String encodedQuery = URLEncoder.encode(keyword, "UTF-8");
+			// 완전한 URL 생성
+			String fullUrl = KAKAO_API_ENDPOINT_URL + "?query=" + encodedQuery;
+            
+            
+			// URL 객체 생성
+			URL url = new URL(fullUrl);
+			
+			// HttpURLConnection 객체 생성 및 설정
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Authorization", "KakaoAK " + KAKAO_API_KEY);
+			
+			int responseCode = conn.getResponseCode();
+			System.out.println("Response Code: " + responseCode);
+			
+			// 응답 읽기
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String inputLine;
+			StringBuilder response = new StringBuilder();
+			
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
 			}
-		} catch(Exception e){
-			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
+			in.close();
+			
+			// 응답 출력
+			System.out.println("Response: " + response.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return null;
