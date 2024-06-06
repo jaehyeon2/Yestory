@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<bean id="GOOGLE_TREND_URL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${google.trend.url}"/>
+	</bean>
+	
+	<bean id="GOOGLE_TREND_FILE_PATH" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${google.trend.file.path}"/>
+	</bean>
+	
+	<bean id="GOOGLE_TREND_FILE_NAME_HEAD" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${google.trend.file.name.head}"/>
+	</bean>
+	
+	<bean id="GOOGLE_TREND_PYTHON_FILE_PATH" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${google.trend.python.file.path}"/>
+	</bean>
+	
+</beans>
