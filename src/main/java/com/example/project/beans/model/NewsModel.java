@@ -7,6 +7,7 @@ public class NewsModel extends ModelS{
 	private String nTitle;
 	private String nContent;
 	private String nDate;
+	private String nUrl;
 	
 	public String getnTitle() {
 		return nTitle;
@@ -26,7 +27,12 @@ public class NewsModel extends ModelS{
 	public void setnDate(String nDate) {
 		this.nDate = nDate;
 	}
-	
+	public String getnUrl() {
+		return nUrl;
+	}
+	public void setnUrl(String nUrl) {
+		this.nUrl = nUrl;
+	}
 	
 
 }
