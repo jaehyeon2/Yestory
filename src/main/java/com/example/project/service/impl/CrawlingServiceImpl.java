@@ -1,7 +1,9 @@
 package com.example.project.service.impl;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,10 +43,13 @@ public class CrawlingServiceImpl implements CrawlingService{
 	private String GOOGLE_TREND_PYTHON_FILE_PATH;
 	
 	@Autowired
-	private String KAKAO_API_KEY;
+	private String NAVER_API_CLIENT_ID;
 	
 	@Autowired
-	private String KAKAO_API_ENDPOINT_URL;
+	private String NAVER_API_CLIENT_SECRET;
+	
+	@Autowired
+	private String NAVER_API_ENDPOINT_URL;
 	
 	@Override
 	public List<String> crawlGoogleSearchTrendList() throws Exception {
@@ -123,19 +128,23 @@ public class CrawlingServiceImpl implements CrawlingService{
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try {
             
-			// 키워드 인코딩
-			String encodedQuery = URLEncoder.encode(keyword, "UTF-8");
 			// 완전한 URL 생성
-			String fullUrl = KAKAO_API_ENDPOINT_URL + "?query=" + encodedQuery;
-            
-            
+			String fullUrl = new StringBuilder()
+					.append(NAVER_API_ENDPOINT_URL)
+					.append("?query=")
+					.append(URLEncoder.encode("위키미키", "UTF-8"))
+					.toString();
+			
 			// URL 객체 생성
 			URL url = new URL(fullUrl);
+			
+			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", fullUrl);
 			
 			// HttpURLConnection 객체 생성 및 설정
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Authorization", "KakaoAK " + KAKAO_API_KEY);
+			conn.setRequestProperty("X-Naver-Client-Id", NAVER_API_CLIENT_ID);
+			conn.setRequestProperty("X-Naver-Client-Secret", NAVER_API_CLIENT_SECRET);
 			
 			int responseCode = conn.getResponseCode();
 			System.out.println("Response Code: " + responseCode);
@@ -144,21 +153,19 @@ public class CrawlingServiceImpl implements CrawlingService{
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String inputLine;
 			StringBuilder response = new StringBuilder();
-			
+            
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
 			in.close();
-			
+            
 			// 응답 출력
 			System.out.println("Response: " + response.toString());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return null;
 	}
-	
-	
-
 }
