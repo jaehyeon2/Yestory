@@ -8,22 +8,17 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-
-	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
-
-	<!-- Application Properties	 -->
-	<context:property-placeholder location="classpath:application.properties" />
-
-	<!-- Set the base package -->
-	<context:component-scan base-package="com.example.project" />
-
-	<!-- Include the core service -->
 	
-	<import resource="classpath:service/kakao.xml"/>
-	<import resource="classpath:service/google.xml"/>
-	<import resource="classpath:service/naver.xml"/>
+	<bean id="NAVER_API_CLIENT_ID" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.api.client.id}"/>
+	</bean>
 	
-	<!-- Users -->
+	<bean id="NAVER_API_CLIENT_SECRET" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.api.client.secret}"/>
+	</bean>
 	
-
+	<bean id="NAVER_API_ENDPOINT_URL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${naver.api.endpoint.url}"/>
+	</bean>
+	
 </beans>
