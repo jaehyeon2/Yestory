@@ -2,12 +2,15 @@ package com.example.project.service.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -73,7 +76,7 @@ public class CrawlingServiceImpl implements CrawlingService{
 //	        for (String keyword:trendList){
 //	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
 //	        }
-	        List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(trendList.get(0));
+	        List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(trendList.get(0).toString());
 	        
 	    } catch (Exception e) {
 	        logger.error("CrawlingServiceImpl::crawlGoogleSearchTrendList::error = {}", e.getMessage(), e);
@@ -107,11 +110,12 @@ public class CrawlingServiceImpl implements CrawlingService{
 	private List<String> getTrendListFromCsv(String filePath) throws Exception {
 	    List<String> trendList = new ArrayList<>();
 	    
-	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+	    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 	        String line;
 	        // skip initial line
 	        line = br.readLine();
 	        while ((line = br.readLine()) != null) {
+	        	logger.info("line = {}", line);
 	            trendList.add(line);
 	        }
 	    }
@@ -127,14 +131,16 @@ public class CrawlingServiceImpl implements CrawlingService{
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try {
+			
             
 			// 완전한 URL 생성
 			String fullUrl = new StringBuilder()
 					.append(NAVER_API_ENDPOINT_URL)
 					.append("?query=")
-					.append(URLEncoder.encode("위키미키", "UTF-8"))
+					.append(URLEncoder.encode(keyword, "UTF-8"))
 					.toString();
 			
+			logger.info("keyword = {}", keyword);
 			// URL 객체 생성
 			URL url = new URL(fullUrl);
 			
@@ -161,6 +167,9 @@ public class CrawlingServiceImpl implements CrawlingService{
             
 			// 응답 출력
 			System.out.println("Response: " + response.toString());
+			FileWriter writer = new FileWriter("C:\\Users\\wol59\\Desktop\\name2.txt");
+			writer.write(response.toString());
+			System.out.println("파일에 텍스트를 성공적으로 작성했습니다.");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
