@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project.beans.model.NewsModel;
+import com.example.project.beans.param.NewsParam;
 import com.example.project.service.CrawlingService;
 
 @Service
@@ -65,7 +66,7 @@ public class CrawlingServiceImpl implements CrawlingService{
 	        this.generateTrendToCsv(filePath);
 	        trendList = this.getTrendListFromCsv(filePath);
 	        for (String keyword:trendList){
-	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
+	        	List<NewsParam> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
 	        	break;
 	        }
 	        
@@ -113,16 +114,15 @@ public class CrawlingServiceImpl implements CrawlingService{
 	    
 	    return trendList;
 	}
-
-	//TODO:
+	
 	@Override
-	public List<NewsModel> crawlingNaverSearchNewsLink(String keyword) throws Exception {
+	public List<NewsParam> crawlingNaverSearchNewsLink(String keyword) throws Exception {
 
-		List<NewsModel> newsList = new ArrayList<>();
+		List<NewsParam> newsList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try{
-			for (int pageNum=1; pageNum<=2; pageNum++){
+			for (int pageNum=1; pageNum<=10; pageNum++){
 				StringBuilder sbUrl = new StringBuilder();
 				sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
 					.append("&start=").append(pageNum)
@@ -137,9 +137,18 @@ public class CrawlingServiceImpl implements CrawlingService{
 				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
 				for (Element link: linkElements){
 					String newsUrl = link.attr("href");
-					logger.info("newsUrl = {}", newsUrl);
+					if (newsList.size()>=5){
+						break;
+					}
+					NewsParam news = new NewsParam();
+					news.setnUrl(newsUrl);
+					news.setnKeyword(keyword);
+					newsList.add(news);
+					logger.info("keyword = {}, newsUrl = {}", keyword, newsUrl);
 				}
-	
+				if (newsList.size()>=5){
+					break;
+				}
 			}
 		} catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());

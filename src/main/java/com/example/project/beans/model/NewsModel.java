@@ -8,6 +8,7 @@ public class NewsModel extends ModelS{
 	private String nContent;
 	private String nDate;
 	private String nUrl;
+	private String nKeyword;
 	
 	public String getnTitle() {
 		return nTitle;
@@ -33,6 +34,11 @@ public class NewsModel extends ModelS{
 	public void setnUrl(String nUrl) {
 		this.nUrl = nUrl;
 	}
-	
+	public String getnKeyword() {
+		return nKeyword;
+	}
+	public void setnKeyword(String nKeyword) {
+		this.nKeyword = nKeyword;
+	}
 
 }
