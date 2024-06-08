@@ -2,12 +2,15 @@ package com.example.project.service.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,15 +45,6 @@ public class CrawlingServiceImpl implements CrawlingService{
 	@Autowired
 	private String GOOGLE_TREND_PYTHON_FILE_PATH;
 	
-	@Autowired
-	private String NAVER_API_CLIENT_ID;
-	
-	@Autowired
-	private String NAVER_API_CLIENT_SECRET;
-	
-	@Autowired
-	private String NAVER_API_ENDPOINT_URL;
-	
 	@Override
 	public List<String> crawlGoogleSearchTrendList() throws Exception {
 	    
@@ -70,10 +64,10 @@ public class CrawlingServiceImpl implements CrawlingService{
 	        
 	        this.generateTrendToCsv(filePath);
 	        trendList = this.getTrendListFromCsv(filePath);
-//	        for (String keyword:trendList){
-//	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
-//	        }
-	        List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(trendList.get(0));
+	        for (String keyword:trendList){
+	        	List<NewsModel> newsListByKeyword = crawlingNaverSearchNewsLink(keyword);
+	        	break;
+	        }
 	        
 	    } catch (Exception e) {
 	        logger.error("CrawlingServiceImpl::crawlGoogleSearchTrendList::error = {}", e.getMessage(), e);
@@ -101,13 +95,14 @@ public class CrawlingServiceImpl implements CrawlingService{
 	            throw new RuntimeException("Python Script Execution Failed with error: " + errorMessage.toString());
 	        }
 	    }
+	    
 	    logger.info("CrawlingServiceImpl::generateTrendToCsv::filePath = {}", filePath);
 	}
 
 	private List<String> getTrendListFromCsv(String filePath) throws Exception {
 	    List<String> trendList = new ArrayList<>();
 	    
-	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+	    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 	        String line;
 	        // skip initial line
 	        line = br.readLine();
@@ -126,46 +121,30 @@ public class CrawlingServiceImpl implements CrawlingService{
 		List<NewsModel> newsList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
-		try {
-            
-			// 완전한 URL 생성
-			String fullUrl = new StringBuilder()
-					.append(NAVER_API_ENDPOINT_URL)
-					.append("?query=")
-					.append(URLEncoder.encode("위키미키", "UTF-8"))
-					.toString();
-			
-			// URL 객체 생성
-			URL url = new URL(fullUrl);
-			
-			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", fullUrl);
-			
-			// HttpURLConnection 객체 생성 및 설정
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("X-Naver-Client-Id", NAVER_API_CLIENT_ID);
-			conn.setRequestProperty("X-Naver-Client-Secret", NAVER_API_CLIENT_SECRET);
-			
-			int responseCode = conn.getResponseCode();
-			System.out.println("Response Code: " + responseCode);
-			
-			// 응답 읽기
-			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String inputLine;
-			StringBuilder response = new StringBuilder();
-            
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+		try{
+			for (int pageNum=1; pageNum<=2; pageNum++){
+				StringBuilder sbUrl = new StringBuilder();
+				sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
+					.append("&start=").append(pageNum)
+					.append("&ds=").append(yesterdayString)
+					.append("&de=").append(todayString);
+				String url = sbUrl.toString();
+	
+				logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
+				
+				Document searchPageDoc = Jsoup.connect(url).get();
+	
+				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
+				for (Element link: linkElements){
+					String newsUrl = link.attr("href");
+					logger.info("newsUrl = {}", newsUrl);
+				}
+	
 			}
-			in.close();
-            
-			// 응답 출력
-			System.out.println("Response: " + response.toString());
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch(Exception e){
+			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
 		}
 		
-		return null;
+		return newsList;
 	}
 }
