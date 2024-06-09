@@ -88,11 +88,11 @@ public class CrawlingServiceImpl implements CrawlingService{
 			Thread.sleep(1000);
 			Document newsPageDoc = connection.get();
 			
-			Elements titleElements = newsPageDoc.select("h2[id*=title_area]");
-			Elements contentElements = newsPageDoc.select("article[id*=dic_area]");
+			Element titleElement = newsPageDoc.select("h2[id*=title_area]").get(0);
+			Element contentElement = newsPageDoc.select("article[id*=dic_area]").get(0);
 			
-			logger.info("titleElements = {}", titleElements.get(0).toString());
-			logger.info("contentElements = {}", contentElements.get(0).toString());
+			logger.info("titleElements = {}", titleElement.text());
+			logger.info("contentElements = {}", contentElement.text());
 			
 			
 		}catch(Exception e){
