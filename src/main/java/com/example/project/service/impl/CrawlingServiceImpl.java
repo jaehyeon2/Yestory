@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.NewsModel;
 import com.example.project.beans.param.NewsParam;
 import com.example.project.service.CrawlingService;
 
@@ -22,7 +24,7 @@ public class CrawlingServiceImpl implements CrawlingService{
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public List<NewsParam> crawlingNaverSearchNewsLink(String keyword) throws Exception {
+	public void crawlingNaverSearchNewsLink(String keyword) throws Exception {
 
 		List<NewsParam> newsList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
@@ -38,7 +40,13 @@ public class CrawlingServiceImpl implements CrawlingService{
 	
 				logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
 				
-				Document searchPageDoc = Jsoup.connect(url).get();
+				Connection connection = Jsoup.connect(url)
+                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                        .timeout(10000);
+
+				Thread.sleep(1000);
+				
+				Document searchPageDoc = connection.get();
 	
 				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
 				for (Element link: linkElements){
@@ -46,11 +54,13 @@ public class CrawlingServiceImpl implements CrawlingService{
 					if (newsList.size()>=5){
 						break;
 					}
-					NewsParam news = new NewsParam();
-					news.setnUrl(newsUrl);
-					news.setnKeyword(keyword);
-					newsList.add(news);
+					NewsParam newsParam = new NewsParam();
+					newsParam.setnUrl(newsUrl);
+					newsParam.setnKeyword(keyword);
+					this.crawlingNaverNews(newsParam);
+					newsList.add(newsParam);
 					logger.info("keyword = {}, newsUrl = {}", keyword, newsUrl);
+					
 				}
 				if (newsList.size()>=5){
 					break;
@@ -60,6 +70,36 @@ public class CrawlingServiceImpl implements CrawlingService{
 			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
 		}
 		
-		return newsList;
+	}
+	
+	@Override
+	public NewsModel crawlingNaverNews(NewsParam newsParam) throws Exception{
+		
+		NewsModel news = new NewsModel();
+		
+		try{
+
+			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getnUrl());
+			
+			Connection connection = Jsoup.connect(newsParam.getnUrl())
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+                    .timeout(10000);
+
+			Thread.sleep(1000);
+			Document newsPageDoc = connection.get();
+			
+			Elements titleElements = newsPageDoc.select("h2[id*=title_area]");
+			Elements contentElements = newsPageDoc.select("article[id*=dic_area]");
+			
+			logger.info("titleElements = {}", titleElements.get(0).toString());
+			logger.info("contentElements = {}", contentElements.get(0).toString());
+			
+			
+		}catch(Exception e){
+			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
+		}
+		
+		
+		return news;
 	}
 }

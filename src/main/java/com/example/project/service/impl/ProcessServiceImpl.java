@@ -32,8 +32,10 @@ public class ProcessServiceImpl implements ProcessService {
 		
 		List<String> trendList = trendService.getGoogleSearchTrendList();
 		
-		
-		
+		for (String trend:trendList){
+			crawlingService.crawlingNaverSearchNewsLink(trend);
+			break;
+		}
 		
 	}
 
