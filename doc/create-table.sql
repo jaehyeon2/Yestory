@@ -1,4 +1,4 @@
-CREATE TABLE mTrend
+CREATE TABLE if NOT EXISTS m_trend
 (
 	mt_no INTEGER NOT NULL,
 	mt_trend CHAR(100) NOT NULL,
@@ -9,10 +9,10 @@ CREATE TABLE mTrend
 	PRIMARY KEY (mt_no)
 )ENGINE=InnoDB;
 
-CREATE TABLE mNews
+CREATE TABLE if NOT EXISTS m_news
 (
 	mn_no INTEGER NOT NULL,
-	mn_keyword CHAR(100) NOT NULL,
+	mt_no INTEGER NOT NULL,
 	mn_title VARCHAR(100) NOT NULL,
 	mn_content VARCHAR(5000) NOT NULL,
 	mn_url VARCHAR(500) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE mNews
 	PRIMARY KEY (mn_no)
 )ENGINE=InnoDB;
 
-CREATE TABLE mSummary
+CREATE TABLE if NOT EXISTS m_summary
 (
 	ms_no INTEGER NOT NULL,
 	mn_no INTEGER NOT NULL,

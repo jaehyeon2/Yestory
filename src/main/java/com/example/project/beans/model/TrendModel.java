@@ -1,6 +1,6 @@
 package com.example.project.beans.model;
 
-public class MTrendModel extends ModelS{
+public class TrendModel extends BasicModel{
 
 	private static final long serialVersionUID = 1L;
 	

@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.model.MNewsModel;
+import com.example.project.beans.model.NewsModel;
 import com.example.project.beans.param.NewsParam;
 import com.example.project.service.CrawlingService;
 
@@ -73,9 +73,9 @@ public class CrawlingServiceImpl implements CrawlingService{
 	}
 	
 	@Override
-	public MNewsModel crawlingNaverNews(NewsParam newsParam) throws Exception{
+	public NewsModel crawlingNaverNews(NewsParam newsParam) throws Exception{
 		
-		MNewsModel news = new MNewsModel();
+		NewsModel news = new NewsModel();
 		
 		try{
 
