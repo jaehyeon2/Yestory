@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.project.dao.master.MnewsDao">
+
+	<insert id="insertNews" parameterType="map">
+		INSERT INTO m_news(
+			mt_no,
+			mn_title,
+			mn_content,
+			mn_url,
+			mn_history,
+			insert_date,
+			update_date,
+			mn_status,
+			mn_deleted
+		) VALUES (
+			#{mtNo},
+			#{mnTitle},
+			#{mnContent},
+			#{mnUrl},
+			#{mtHistory},
+			now(),
+			now(),
+			null,
+			'0'
+		)
+	</insert>
+
+	
+</mapper>
