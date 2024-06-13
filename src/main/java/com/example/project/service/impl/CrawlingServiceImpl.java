@@ -16,10 +16,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.beans.model.NewsModel;
 import com.example.project.beans.param.NewsParam;
+import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingService;
 
 @Service
-public class CrawlingServiceImpl implements CrawlingService{
+public class CrawlingServiceImpl extends BasicService implements CrawlingService{
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	

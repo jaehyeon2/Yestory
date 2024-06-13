@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.param.TrendParam;
+import com.example.project.service.BasicService;
 import com.example.project.service.TrendService;
 
 @Service
-public class TrendServiceImpl implements TrendService {
+public class TrendServiceImpl extends BasicService implements TrendService {
 
 final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -34,9 +37,9 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public List<String> getGoogleSearchTrendList() throws Exception {
 	    
 		List<String> trendList = new ArrayList<>();
-	    
+	    String yesterdayString = this.getYesterdayDate();
 	    try {
-	        String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+	        
 	        logger.info("CrawlingServiceImpl::crawlGoogleSearchTrendList::yesterday = {}", yesterdayString);
 	        
 	        StringBuilder sbFilePath = new StringBuilder();
@@ -93,5 +96,16 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	    }
 	    
 	    return trendList;
+	}
+	
+	public boolean insertTrend(TrendParam trendParam) throws SQLException{
+		
+		try{
+			
+		}catch(Exception e){
+			
+		}
+		return true;
+		
 	}
 }

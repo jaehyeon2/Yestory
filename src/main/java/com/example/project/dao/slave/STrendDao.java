@@ -1,4 +1,4 @@
-package dao.slave;
+package com.example.project.dao.slave;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.project.beans.model.TrendModel;
 import com.example.project.beans.param.TrendParam;
 
-public interface StrendDao {
+public interface STrendDao {
 
 	public List<TrendModel> selectTrendList(TrendParam trendParam) throws SQLException;
 	

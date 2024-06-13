@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingService;
 import com.example.project.service.ProcessService;
 import com.example.project.service.TrendService;
 
 @EnableAsync
 @Service
-public class ProcessServiceImpl implements ProcessService {
+public class ProcessServiceImpl extends BasicService implements ProcessService {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
