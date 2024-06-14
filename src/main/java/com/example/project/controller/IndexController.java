@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.project.service.CrawlingService;
-import com.example.project.service.ProcessService;
-import com.example.project.service.TrendService;
+import com.example.project.service.CrawlingYService;
+import com.example.project.service.ProcessYService;
+import com.example.project.service.TrendYService;
 
 @Controller
 @RequestMapping({"/", "", "/index"})
@@ -18,17 +18,17 @@ public class IndexController {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private TrendService trendService;
+	private TrendYService trendYService;
 	
 	@Autowired
-	private ProcessService processService;
+	private ProcessYService processYService;
 	
 	@Autowired
-	private CrawlingService crawlingService;
+	private CrawlingYService crawlingYService;
 	
 	@GetMapping("/")
 	public String index() throws Exception{
-		processService.executeProcess();
+		processYService.executeProcess();
 		return "index";
 	}
 }

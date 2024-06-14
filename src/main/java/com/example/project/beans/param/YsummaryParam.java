@@ -1,6 +1,6 @@
 package com.example.project.beans.param;
 
-public class SummaryParam extends BasicParam{
+public class YsummaryParam extends BasicParam{
 
 	
 }

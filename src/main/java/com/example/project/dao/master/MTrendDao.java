@@ -2,13 +2,13 @@ package com.example.project.dao.master;
 
 import java.sql.SQLException;
 
-import com.example.project.beans.param.TrendParam;
+import com.example.project.beans.param.YtrendParam;
 
 public interface MTrendDao {
 	
-	public int insertTrend(TrendParam trendParam) throws SQLException;
+	public int insertTrend(YtrendParam trendParam) throws SQLException;
 	
-	public int updateTrend(TrendParam trendParam) throws SQLException;
+	public int updateTrend(YtrendParam trendParam) throws SQLException;
 	
-	public int deleteTrend(TrendParam trendParam) throws SQLException;
+	public int deleteTrend(YtrendParam trendParam) throws SQLException;
 }

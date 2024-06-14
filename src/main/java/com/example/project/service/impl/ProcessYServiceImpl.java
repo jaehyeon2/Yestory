@@ -10,32 +10,32 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import com.example.project.service.BasicService;
-import com.example.project.service.CrawlingService;
-import com.example.project.service.ProcessService;
-import com.example.project.service.TrendService;
+import com.example.project.service.CrawlingYService;
+import com.example.project.service.ProcessYService;
+import com.example.project.service.TrendYService;
 
 @EnableAsync
 @Service
-public class ProcessServiceImpl extends BasicService implements ProcessService {
+public class ProcessYServiceImpl extends BasicService implements ProcessYService {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private TrendService trendService;
+	private TrendYService trendYService;
 	
 	@Autowired
-	private CrawlingService crawlingService;
+	private CrawlingYService crawlingYService;
 	
 	
 	
 	@Override
 	public void executeProcess() throws Exception{
 		
-		List<String> trendList = trendService.getGoogleSearchTrendList();
+		List<String> trendList = trendYService.getGoogleSearchTrendList();
 		
 		
 		for (String trend:trendList){
-			crawlingService.crawlingNaverSearchNewsLink(trend);
+			crawlingYService.crawlingNaverSearchNewsLink(trend);
 			break;
 		}
 		

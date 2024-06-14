@@ -2,13 +2,13 @@ package com.example.project.dao.master;
 
 import java.sql.SQLException;
 
-import com.example.project.beans.param.NewsParam;
+import com.example.project.beans.param.YnewsParam;
 
 public interface MNewsDao {
 	
-	public int insertNews(NewsParam newsParam) throws SQLException;
+	public int insertNews(YnewsParam newsParam) throws SQLException;
 	
-	public int updateNews(NewsParam newsParam) throws SQLException;
+	public int updateNews(YnewsParam newsParam) throws SQLException;
 	
-	public int deleteNews(NewsParam newsParam) throws SQLException;
+	public int deleteNews(YnewsParam newsParam) throws SQLException;
 }

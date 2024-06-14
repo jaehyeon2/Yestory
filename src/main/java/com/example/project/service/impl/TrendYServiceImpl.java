@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.param.TrendParam;
+import com.example.project.beans.param.YtrendParam;
 import com.example.project.service.BasicService;
-import com.example.project.service.TrendService;
+import com.example.project.service.TrendYService;
 
 @Service
-public class TrendServiceImpl extends BasicService implements TrendService {
+public class TrendYServiceImpl extends BasicService implements TrendYService {
 
 final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -98,7 +98,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	    return trendList;
 	}
 	
-	public boolean insertTrend(TrendParam trendParam) throws SQLException{
+	public boolean insertTrend(YtrendParam trendParam) throws SQLException{
 		
 		try{
 			

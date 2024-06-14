@@ -1,6 +1,6 @@
 package com.example.project.beans.model;
 
-public class NewsModel extends BasicModel{
+public class YnewsModel extends BasicModel{
 	
 	private static final long serialVersionUID = 1L;
 	

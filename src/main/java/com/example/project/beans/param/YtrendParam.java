@@ -1,6 +1,6 @@
 package com.example.project.beans.param;
 
-public class TrendParam extends BasicParam{
+public class YtrendParam extends BasicParam{
 
 	private String tTrend;
 

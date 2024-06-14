@@ -14,20 +14,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.model.NewsModel;
-import com.example.project.beans.param.NewsParam;
+import com.example.project.beans.model.YnewsModel;
+import com.example.project.beans.param.YnewsParam;
 import com.example.project.service.BasicService;
-import com.example.project.service.CrawlingService;
+import com.example.project.service.CrawlingYService;
 
 @Service
-public class CrawlingServiceImpl extends BasicService implements CrawlingService{
+public class CrawlingYServiceImpl extends BasicService implements CrawlingYService{
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
 	public void crawlingNaverSearchNewsLink(String keyword) throws Exception {
 
-		List<NewsParam> newsList = new ArrayList<>();
+		List<YnewsParam> newsList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try{
@@ -55,7 +55,7 @@ public class CrawlingServiceImpl extends BasicService implements CrawlingService
 					if (newsList.size()>=5){
 						break;
 					}
-					NewsParam newsParam = new NewsParam();
+					YnewsParam newsParam = new YnewsParam();
 					newsParam.setnUrl(newsUrl);
 					newsParam.setnKeyword(keyword);
 					this.crawlingNaverNews(newsParam);
@@ -74,9 +74,9 @@ public class CrawlingServiceImpl extends BasicService implements CrawlingService
 	}
 	
 	@Override
-	public NewsModel crawlingNaverNews(NewsParam newsParam) throws Exception{
+	public YnewsModel crawlingNaverNews(YnewsParam newsParam) throws Exception{
 		
-		NewsModel news = new NewsModel();
+		YnewsModel news = new YnewsModel();
 		
 		try{
 
