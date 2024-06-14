@@ -35,7 +35,7 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 		
 		
 		for (String trend:trendList){
-			crawlingYService.crawlingNaverSearchNewsLink(trend);
+			crawlingYService.crawlingNaverSearchNews(trend);
 			break;
 		}
 		

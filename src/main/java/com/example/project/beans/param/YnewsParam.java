@@ -4,7 +4,6 @@ public class YnewsParam extends BasicParam{
 
 	private String nTitle;
 	private String nContent;
-	private String nDate;
 	private String nUrl;
 	private String nKeyword;
 	
@@ -19,12 +18,6 @@ public class YnewsParam extends BasicParam{
 	}
 	public void setnContent(String nContent) {
 		this.nContent = nContent;
-	}
-	public String getnDate() {
-		return nDate;
-	}
-	public void setnDate(String nDate) {
-		this.nDate = nDate;
 	}
 	public String getnUrl() {
 		return nUrl;

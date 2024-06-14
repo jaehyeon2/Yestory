@@ -1,9 +1,12 @@
 package com.example.project.service.impl;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.beans.model.YnewsModel;
 import com.example.project.beans.param.YnewsParam;
+import com.example.project.dao.master.MNewsDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
 
@@ -25,9 +29,9 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public void crawlingNaverSearchNewsLink(String keyword) throws Exception {
+	public void crawlingNaverSearchNews(String keyword) throws Exception {
 
-		List<YnewsParam> newsList = new ArrayList<>();
+		List<YnewsParam> newsParamList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try{
@@ -52,31 +56,34 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
 				for (Element link: linkElements){
 					String newsUrl = link.attr("href");
-					if (newsList.size()>=5){
+					if (newsParamList.size()>=5){
 						break;
 					}
 					YnewsParam newsParam = new YnewsParam();
 					newsParam.setnUrl(newsUrl);
 					newsParam.setnKeyword(keyword);
 					this.crawlingNaverNews(newsParam);
-					newsList.add(newsParam);
+					newsParamList.add(newsParam);
 					logger.info("keyword = {}, newsUrl = {}", keyword, newsUrl);
 					
 				}
-				if (newsList.size()>=5){
+				if (newsParamList.size()>=5){
 					break;
 				}
 			}
+			
+			for(YnewsParam newsParam:newsParamList){
+				this.crawlingNaverNews(newsParam);
+			}
+			
 		} catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
 		}
 		
+		
 	}
 	
-	@Override
-	public YnewsModel crawlingNaverNews(YnewsParam newsParam) throws Exception{
-		
-		YnewsModel news = new YnewsModel();
+	private void crawlingNaverNews(YnewsParam newsParam) throws Exception{
 		
 		try{
 
@@ -89,18 +96,40 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			Thread.sleep(1000);
 			Document newsPageDoc = connection.get();
 			
-			Element titleElement = newsPageDoc.select("h2[id*=title_area]").get(0);
-			Element contentElement = newsPageDoc.select("article[id*=dic_area]").get(0);
+			String title = newsPageDoc.select("h2[id*=title_area]").get(0).toString();
+			String content = newsPageDoc.select("article[id*=dic_area]").get(0).toString();
 			
-			logger.info("titleElements = {}", titleElement.text());
-			logger.info("contentElements = {}", contentElement.text());
+			newsParam.setDate(this.getYesterdayDate());
+			newsParam.setnTitle(title);
+			newsParam.setnContent(content);
 			
+			this.insertNaverNews(newsParam);
 			
 		}catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
 		}
+	}
+	
+	private boolean insertNaverNews(YnewsParam newsParam) throws Exception{
 		
+		Map<String, String> map = new HashMap<>();
 		
-		return news;
+		try{
+			map.put("", newsParam.getnTitle());
+			map.put("", newsParam.getnContent());
+			map.put("", newsParam.getnKeyword());
+			map.put("", newsParam.getDate());
+			
+			int result = mDbDao.getMapper(MNewsDao.class).insertNews(newsParam);
+			if (result<1){
+				return false;
+			}
+			
+		}catch(Exception e){
+			logger.error("CrawlingServiceImpl::insertNaverNews::Error = {}", e.getMessage());
+			return false;
+		}
+		return true;
+		
 	}
 }

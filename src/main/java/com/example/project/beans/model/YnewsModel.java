@@ -8,7 +8,7 @@ public class YnewsModel extends BasicModel{
 	private String mnTitle;
 	private String mnContent;
 	private String mnUrl;
-	private String insertDate;
+	private String mnDate;
 	
 	public String getMnKeyword() {
 		return mnKeyword;
@@ -34,10 +34,10 @@ public class YnewsModel extends BasicModel{
 	public void setMnUrl(String mnUrl) {
 		this.mnUrl = mnUrl;
 	}
-	public String getInsertDate() {
-		return insertDate;
+	public String getMnDate() {
+		return mnDate;
 	}
-	public void setInsertDate(String insertDate) {
-		this.insertDate = insertDate;
+	public void setMnDate(String mnDate) {
+		this.mnDate = mnDate;
 	}
 }

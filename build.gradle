@@ -67,8 +67,8 @@ dependencies {
 	//implementation 'org.apache.commons:commons-dbcp2:2.9.0'
 	//implementation 'org.apache.commons:commons-pool2:2.11.1'
 
-	//implementation "org.mybatis:mybatis:3.5.11"
-	//implementation 'org.mybatis:mybatis-spring:2.0.7'
+	implementation "org.mybatis:mybatis:3.5.11"
+	implementation 'org.mybatis:mybatis-spring:2.0.7'
 	//implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.5'
 
 	//implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
@@ -81,7 +81,7 @@ dependencies {
 	//implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
 
 	//implementation 'commons-fileupload:commons-fileupload:1.5'
-	//implementation 'org.springframework.session:spring-session-data-redis:2.7.2'
+	implementation 'org.springframework.session:spring-session-data-redis:2.7.2'
 	//implementation 'org.springframework.data:spring-data-redis:2.7.14'
 	//implementation 'io.lettuce:lettuce-core:6.2.5.RELEASE'
 	//implementation 'com.danga.memcached:danga-memcached:2.6.6'
