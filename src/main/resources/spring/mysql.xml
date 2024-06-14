@@ -54,13 +54,13 @@
 	<!-- For transaction -->
 	<bean id="sqlSessionMasterFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mysqlMaster" />  
-		<property name="configLocation" value="classpath:masterMap.xml"/>
+		<property name="configLocation" value="classpath:masterDB.xml"/>
 	</bean>
 
 	<!-- Slave-->
 	<bean id="sqlSessionSlaveFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="mysqlSlave00" />
-		<property name="configLocation" value="classpath:slaveMap.xml"/>
+		<property name="configLocation" value="classpath:slaveDB.xml"/>
 	</bean>
 
 </beans>

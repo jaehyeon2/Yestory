@@ -103,7 +103,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			newsParam.setnTitle(title);
 			newsParam.setnContent(content);
 			
-			this.insertNaverNews(newsParam);
+//			this.insertNaverNews(newsParam);
 			
 		}catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
