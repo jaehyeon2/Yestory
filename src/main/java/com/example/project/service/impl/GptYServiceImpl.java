@@ -25,11 +25,23 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	@Autowired
 	private String OPENAI_API_ENDPOINT_URL;
 	
+	@Autowired
+	private String HEAD_PROMPT;
+	
+	@Autowired
+	private String BODY_PROMPT;
+	
+	@Autowired
+	private String TAIL_PROMPT;
+	
 	@Override
 	public String receiveAnswer(String prompt) throws Exception {
         StringBuilder response = new StringBuilder();
 
         try {
+        	
+        	logger.info("receiveAnswer = {}", this.makePrompt("test"));
+        	
             // 생성할 텍스트 및 요청 데이터 설정
             String requestData = new JSONObject()
                     .put("prompt", prompt)
@@ -82,9 +94,15 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	
 	private String makePrompt(String prompt){
 		
+		String totalPrompt = new StringBuilder()
+				.append(HEAD_PROMPT)
+				.append("title")
+				.append(BODY_PROMPT)
+				.append("content")
+				.append(TAIL_PROMPT)
+				.toString();
 		
-		
-		return "test";
+		return totalPrompt;
 	}
 	
 }
