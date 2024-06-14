@@ -1,6 +1,5 @@
 package com.example.project.service.impl;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -17,9 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.model.YnewsModel;
 import com.example.project.beans.param.YnewsParam;
-import com.example.project.dao.master.MNewsDao;
+import com.example.project.dao.master.MnewsDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
 
@@ -29,7 +27,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
-	public void crawlingNaverSearchNews(String keyword) throws Exception {
+	public void crawlingNaverSearchNews(String trend) throws Exception {
 
 		List<YnewsParam> newsParamList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
@@ -37,7 +35,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 		try{
 			for (int pageNum=1; pageNum<=10; pageNum++){
 				StringBuilder sbUrl = new StringBuilder();
-				sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(keyword)
+				sbUrl.append("https://search.naver.com/search.naver?where=news&sm=tab_pge&query=").append(trend)
 					.append("&start=").append(pageNum)
 					.append("&ds=").append(yesterdayString)
 					.append("&de=").append(todayString);
@@ -60,11 +58,11 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 						break;
 					}
 					YnewsParam newsParam = new YnewsParam();
-					newsParam.setnUrl(newsUrl);
-					newsParam.setnKeyword(keyword);
+					newsParam.setMnUrl(newsUrl);
+					newsParam.setMtTrend(trend);
 					this.crawlingNaverNews(newsParam);
 					newsParamList.add(newsParam);
-					logger.info("keyword = {}, newsUrl = {}", keyword, newsUrl);
+					logger.info("keyword = {}, newsUrl = {}", trend, newsUrl);
 					
 				}
 				if (newsParamList.size()>=5){
@@ -87,9 +85,9 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 		
 		try{
 
-			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getnUrl());
+			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getMnUrl());
 			
-			Connection connection = Jsoup.connect(newsParam.getnUrl())
+			Connection connection = Jsoup.connect(newsParam.getMnUrl())
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
                     .timeout(10000);
 
@@ -99,11 +97,11 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			String title = newsPageDoc.select("h2[id*=title_area]").get(0).toString();
 			String content = newsPageDoc.select("article[id*=dic_area]").get(0).toString();
 			
-			newsParam.setDate(this.getYesterdayDate());
-			newsParam.setnTitle(title);
-			newsParam.setnContent(content);
+			newsParam.setHistory(this.getYesterdayDate());
+			newsParam.setMnTitle(title);
+			newsParam.setMnContent(content);
 			
-//			this.insertNaverNews(newsParam);
+			this.insertNaverNews(newsParam);
 			
 		}catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
@@ -115,12 +113,13 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 		Map<String, String> map = new HashMap<>();
 		
 		try{
-			map.put("", newsParam.getnTitle());
-			map.put("", newsParam.getnContent());
-			map.put("", newsParam.getnKeyword());
-			map.put("", newsParam.getDate());
+			map.put("mtTrend", newsParam.getMtTrend());
+			map.put("mnTitle", newsParam.getMnTitle());
+			map.put("mnContent", newsParam.getMnContent());
+			map.put("mnUrl", newsParam.getMnUrl());
+			map.put("history", newsParam.getHistory());
 			
-			int result = mDbDao.getMapper(MNewsDao.class).insertNews(newsParam);
+			int result = mDbDao.getMapper(MnewsDao.class).insertNews(newsParam);
 			if (result<1){
 				return false;
 			}

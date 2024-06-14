@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import com.example.project.beans.param.YnewsParam;
 
-public interface MNewsDao {
+public interface MnewsDao {
 	
 	public int insertNews(YnewsParam newsParam) throws SQLException;
 	

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import com.example.project.beans.param.YsummaryParam;
 
-public interface MSummaryDao {
+public interface MsummaryDao {
 
 	public int insertSummary(YsummaryParam summaryParam) throws SQLException;
 	

@@ -3,13 +3,13 @@ package com.example.project.beans.param;
 
 public class BasicParam{
 
-	private String date;
+	private String history;
 
-	public String getDate() {
-		return date;
+	public String getHistory() {
+		return history;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setHistory(String history) {
+		this.history = history;
 	}	
 }

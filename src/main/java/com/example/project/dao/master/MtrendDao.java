@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import com.example.project.beans.param.YtrendParam;
 
-public interface MTrendDao {
+public interface MtrendDao {
 	
 	public int insertTrend(YtrendParam trendParam) throws SQLException;
 	

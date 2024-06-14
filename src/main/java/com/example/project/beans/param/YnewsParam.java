@@ -2,34 +2,33 @@ package com.example.project.beans.param;
 
 public class YnewsParam extends BasicParam{
 
-	private String nTitle;
-	private String nContent;
-	private String nUrl;
-	private String nKeyword;
+	private String mnTitle;
+	private String mnContent;
+	private String mnUrl;
+	private String mtTrend;
 	
-	public String getnTitle() {
-		return nTitle;
+	public String getMnTitle() {
+		return mnTitle;
 	}
-	public void setnTitle(String nTitle) {
-		this.nTitle = nTitle;
+	public void setMnTitle(String mnTitle) {
+		this.mnTitle = mnTitle;
 	}
-	public String getnContent() {
-		return nContent;
+	public String getMnContent() {
+		return mnContent;
 	}
-	public void setnContent(String nContent) {
-		this.nContent = nContent;
+	public void setMnContent(String mnContent) {
+		this.mnContent = mnContent;
 	}
-	public String getnUrl() {
-		return nUrl;
+	public String getMnUrl() {
+		return mnUrl;
 	}
-	public void setnUrl(String nUrl) {
-		this.nUrl = nUrl;
+	public void setMnUrl(String mnUrl) {
+		this.mnUrl = mnUrl;
 	}
-	public String getnKeyword() {
-		return nKeyword;
+	public String getMtTrend() {
+		return mtTrend;
 	}
-	public void setnKeyword(String nKeyword) {
-		this.nKeyword = nKeyword;
+	public void setMtTrend(String mtTrend) {
+		this.mtTrend = mtTrend;
 	}
-	
 }

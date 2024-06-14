@@ -2,12 +2,16 @@ package com.example.project.beans.param;
 
 public class YtrendParam extends BasicParam{
 
-	private String tTrend;
+	private String mtTrend;
 
-	public String gettTrend() {
-		return tTrend;
+	public String getMtTrend() {
+		return mtTrend;
 	}
-	public void settTrend(String tTrend) {
-		this.tTrend = tTrend;
+
+	public void setMtTrend(String mtTrend) {
+		this.mtTrend = mtTrend;
 	}
+
+	
+	
 }
