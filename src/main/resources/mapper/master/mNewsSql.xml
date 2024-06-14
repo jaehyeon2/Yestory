@@ -6,21 +6,21 @@
 
 	<insert id="insertNews" parameterType="map">
 		INSERT INTO m_news(
-			mt_no,
+			mt_trend,
 			mn_title,
 			mn_content,
 			mn_url,
-			mn_history,
+			history,
 			insert_date,
 			update_date,
 			mn_status,
 			mn_deleted
 		) VALUES (
-			#{mtNo},
+			#{mtTrend},
 			#{mnTitle},
 			#{mnContent},
 			#{mnUrl},
-			#{mtHistory},
+			#{history},
 			now(),
 			now(),
 			null,
