@@ -111,7 +111,11 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	private boolean insertNaverNews(YnewsParam newsParam) throws Exception{
 		
 		Map<String, String> map = new HashMap<>();
-		
+		logger.info("log = {}", newsParam.getMtTrend());
+		logger.info("log = {}", newsParam.getMnTitle());
+		logger.info("log = {}", newsParam.getMnContent());
+		logger.info("log = {}", newsParam.getMnUrl());
+		logger.info("log = {}", newsParam.getHistory());
 		try{
 			map.put("mtTrend", newsParam.getMtTrend());
 			map.put("mnTitle", newsParam.getMnTitle());
