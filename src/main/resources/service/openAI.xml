@@ -17,4 +17,8 @@
 		<constructor-arg value="${openai.api.endpoint.url}"/>
 	</bean>
 	
+	<bean id="OPENAI_API_GPT_MODEL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${openai.api.gpt.model}"/>
+	</bean>
+	
 </beans>

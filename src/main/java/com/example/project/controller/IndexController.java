@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.project.beans.param.YnewsParam;
 import com.example.project.service.CrawlingYService;
 import com.example.project.service.GptYService;
 import com.example.project.service.ProcessYService;
@@ -38,7 +39,8 @@ public class IndexController {
 	
 	@GetMapping("/gpt")
 	public String gptTest() throws Exception{
-		gptYService.receiveAnswer("안녕!");
+		YnewsParam newsParam = new YnewsParam();
+		gptYService.getGPTResponse(newsParam);
 		
 		return "index";
 		

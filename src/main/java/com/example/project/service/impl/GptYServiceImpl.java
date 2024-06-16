@@ -7,12 +7,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.param.YnewsParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.GptYService;
 
@@ -29,6 +31,9 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	private String OPENAI_API_ENDPOINT_URL;
 	
 	@Autowired
+	private String OPENAI_API_GPT_MODEL;
+	
+	@Autowired
 	private String HEAD_PROMPT;
 	
 	@Autowired
@@ -38,76 +43,81 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	private String TAIL_PROMPT;
 	
 	@Override
-	public String receiveAnswer(String prompt) throws Exception {
-        StringBuilder response = new StringBuilder();
+	public String getGPTResponse(YnewsParam newsParam) throws Exception {
+        // 요청 본문 생성
+		String fullPrompt = this.makePrompt(newsParam);
+		
+        String requestBody = createRequestBody(fullPrompt);
 
-        String fullPrompt = this.makePrompt(prompt);
-        try {
-        	
-        	logger.info("receiveAnswer = {}", fullPrompt);
-        	
-            // 생성할 텍스트 및 요청 데이터 설정
-            String requestData = new JSONObject()
-            		.put("model", "gpt-3.5-turbo")
-                    .put("prompt", fullPrompt)
-                    .put("max_tokens", 5) // Optional: you can set other parameters as needed
-                    .toString();
+        // HTTP 연결 설정
+        URL url = new URL(OPENAI_API_ENDPOINT_URL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Authorization", "Bearer " + OPENAI_API_KEY);
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+        connection.setDoOutput(true);
 
-            // URL 및 연결 생성
-            URL url = new URL(OPENAI_API_ENDPOINT_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // HTTP 메서드 설정
-            connection.setRequestMethod("POST");
-
-            // HTTP 요청 헤더 설정
-            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            connection.setRequestProperty("Authorization", "Bearer " + OPENAI_API_KEY);
-
-            // 요청 본문 작성
-            connection.setDoOutput(true);
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = requestData.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            // HTTP 응답 처리
-            int status = connection.getResponseCode();
-            if (status == HttpURLConnection.HTTP_OK) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line.trim());
-                    }
-                }
-            } else {
-                logger.error("Error: Received HTTP status code {}", status);
-                throw new IOException("Failed to receive a valid response from the API");
-            }
-
-            // JSON 응답 파싱
-            JSONObject jsonResponse = new JSONObject(response.toString());
-            String result = jsonResponse.getJSONArray("choices").getJSONObject(0).getString("text").trim();
-
-            return result;
-
-        } catch (Exception e) {
-            logger.error("GPTServiceImpl::receiveAnswer::Error = {}", e.toString());
-            throw e;
+        // 요청 본문 전송
+        try (OutputStream os = connection.getOutputStream()) {
+            byte[] input = requestBody.getBytes("utf-8");
+            os.write(input, 0, input.length);
         }
+
+        // 응답 코드 확인
+        int responseCode = connection.getResponseCode();
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new IOException("Unexpected code " + responseCode);
+        }
+
+        // 응답 본문 읽기
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+        }
+
+        // 응답 처리
+        logger.info("response = {}", response.toString());
+        return parseResponse(response.toString());
     }
 	
-	private String makePrompt(String prompt){
+	
+	private String makePrompt(YnewsParam newsParam){
 		
-		String totalPrompt = new StringBuilder()
+		String fullPrompt = new StringBuilder()
 				.append(HEAD_PROMPT)
-				.append("title")
+				.append(newsParam.getMnTitle())
 				.append(BODY_PROMPT)
-				.append("content")
+				.append(newsParam.getMnContent())
 				.append(TAIL_PROMPT)
 				.toString();
 		
-		return totalPrompt;
+		return fullPrompt;
 	}
 	
+    private String createRequestBody(String prompt) {
+    	
+        JSONObject json = new JSONObject();
+        json.put("model", OPENAI_API_GPT_MODEL);
+
+        JSONArray messages = new JSONArray();
+        JSONObject message = new JSONObject();
+        message.put("role", "user");
+        message.put("content", prompt);
+        messages.put(message);
+
+        json.put("messages", messages);
+
+        return json.toString();
+    }
+
+    private String parseResponse(String responseBody) {
+        // 응답 처리
+        JSONObject json = new JSONObject(responseBody);
+        JSONArray choices = json.getJSONArray("choices");
+        JSONObject message = choices.getJSONObject(0).getJSONObject("message");
+        return message.getString("content");
+    }
 }

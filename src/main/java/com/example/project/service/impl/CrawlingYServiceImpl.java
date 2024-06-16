@@ -60,7 +60,6 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					YnewsParam newsParam = new YnewsParam();
 					newsParam.setMnUrl(newsUrl);
 					newsParam.setMtTrend(trend);
-					this.crawlingNaverNews(newsParam);
 					newsParamList.add(newsParam);
 					
 				}
@@ -68,7 +67,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					break;
 				}
 			}
-			
+			logger.info("newsParamListSize = {}", newsParamList.size());
 			for(YnewsParam newsParam:newsParamList){
 				
 				this.crawlingNaverNews(newsParam);
