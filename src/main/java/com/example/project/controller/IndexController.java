@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.project.service.CrawlingYService;
+import com.example.project.service.GptYService;
 import com.example.project.service.ProcessYService;
 import com.example.project.service.TrendYService;
 
@@ -24,11 +25,22 @@ public class IndexController {
 	private ProcessYService processYService;
 	
 	@Autowired
+	private GptYService gptYService;
+	
+	@Autowired
 	private CrawlingYService crawlingYService;
 	
 	@GetMapping("/")
 	public String index() throws Exception{
 		processYService.executeProcess();
 		return "index";
+	}
+	
+	@GetMapping("/gpt")
+	public String gptTest() throws Exception{
+		gptYService.receiveAnswer("안녕!");
+		
+		return "index";
+		
 	}
 }

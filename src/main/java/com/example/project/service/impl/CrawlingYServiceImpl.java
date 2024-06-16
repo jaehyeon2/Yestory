@@ -62,7 +62,6 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					newsParam.setMtTrend(trend);
 					this.crawlingNaverNews(newsParam);
 					newsParamList.add(newsParam);
-					logger.info("keyword = {}, newsUrl = {}", trend, newsUrl);
 					
 				}
 				if (newsParamList.size()>=5){
@@ -71,6 +70,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			}
 			
 			for(YnewsParam newsParam:newsParamList){
+				
 				this.crawlingNaverNews(newsParam);
 			}
 			
@@ -94,8 +94,8 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			Thread.sleep(1000);
 			Document newsPageDoc = connection.get();
 			
-			String title = newsPageDoc.select("h2[id*=title_area]").get(0).toString();
-			String content = newsPageDoc.select("article[id*=dic_area]").get(0).toString();
+			String title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
+			String content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
 			
 			newsParam.setHistory(this.getYesterdayDate());
 			newsParam.setMnTitle(title);
@@ -111,11 +111,8 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	private boolean insertNaverNews(YnewsParam newsParam) throws Exception{
 		
 		Map<String, String> map = new HashMap<>();
-		logger.info("log = {}", newsParam.getMtTrend());
-		logger.info("log = {}", newsParam.getMnTitle());
-		logger.info("log = {}", newsParam.getMnContent());
-		logger.info("log = {}", newsParam.getMnUrl());
-		logger.info("log = {}", newsParam.getHistory());
+		logger.info("title = {}", newsParam.getMnTitle());
+		logger.info("content = {}", newsParam.getMnContent());
 		try{
 			map.put("mtTrend", newsParam.getMtTrend());
 			map.put("mnTitle", newsParam.getMnTitle());

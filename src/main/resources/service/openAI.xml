@@ -9,11 +9,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	
-	<bean id="OPEN_API_KEY" class="java.lang.String" scope="singleton">
+	<bean id="OPENAI_API_KEY" class="java.lang.String" scope="singleton">
 		<constructor-arg value="${openai.api.key}"/>
 	</bean>
 	
-	<bean id="OPEN_API_ENDPOINT_URL" class="java.lang.String" scope="singleton">
+	<bean id="OPENAI_API_ENDPOINT_URL" class="java.lang.String" scope="singleton">
 		<constructor-arg value="${openai.api.endpoint.url}"/>
 	</bean>
 	

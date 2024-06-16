@@ -3,18 +3,21 @@ package com.example.project.service.impl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.json.JSONObject;
-import org.omg.CORBA.portable.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.project.service.BasicService;
 import com.example.project.service.GptYService;
 
+
+@Service
 public class GptYServiceImpl extends BasicService implements GptYService{
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -61,7 +64,7 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 
             // 요청 본문 작성
             connection.setDoOutput(true);
-            try (OutputStream os = (OutputStream) connection.getOutputStream()) {
+            try (OutputStream os = connection.getOutputStream()) {
                 byte[] input = requestData.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
