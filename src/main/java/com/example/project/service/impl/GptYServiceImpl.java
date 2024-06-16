@@ -41,13 +41,15 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	public String receiveAnswer(String prompt) throws Exception {
         StringBuilder response = new StringBuilder();
 
+        String fullPrompt = this.makePrompt(prompt);
         try {
         	
-        	logger.info("receiveAnswer = {}", this.makePrompt("test"));
+        	logger.info("receiveAnswer = {}", fullPrompt);
         	
             // 생성할 텍스트 및 요청 데이터 설정
             String requestData = new JSONObject()
-                    .put("prompt", prompt)
+            		.put("model", "gpt-3.5-turbo")
+                    .put("prompt", fullPrompt)
                     .put("max_tokens", 5) // Optional: you can set other parameters as needed
                     .toString();
 
