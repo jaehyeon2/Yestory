@@ -1,14 +1,14 @@
 package com.example.project.service.impl;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project.beans.param.YtrendParam;
+import com.example.project.dao.master.MtrendDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.TrendYService;
 
@@ -38,26 +39,48 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	    
 		List<String> trendList = new ArrayList<>();
 	    String yesterdayString = this.getYesterdayDate();
+	    
 	    try {
 	        
 	        logger.info("CrawlingServiceImpl::crawlGoogleSearchTrendList::yesterday = {}", yesterdayString);
 	        
-	        StringBuilder sbFilePath = new StringBuilder();
-	        String filePath = sbFilePath
+	        String filePath = new StringBuilder()
 	            .append(GOOGLE_TREND_FILE_PATH)
 	            .append(GOOGLE_TREND_FILE_NAME_HEAD)
 	            .append(yesterdayString)
 	            .append(".csv")
 	            .toString();
 	        
-	        this.generateTrendToCsv(filePath);
+	        if (!new File(filePath).exists()){
+	        	logger.info("TrendYServiceImpl::getGoogleSearchTrendList::info = generate new csv file");
+	        	this.generateTrendToCsv(filePath);
+	        }
 	        trendList = this.getTrendListFromCsv(filePath);
 	        
 	    } catch (Exception e) {
 	        logger.error("CrawlingServiceImpl::crawlGoogleSearchTrendList::error = {}", e.getMessage(), e);
+	        throw e;
 	    }
 	    
 	    return trendList;
+	}
+	
+	@Override
+	public boolean insertTrendList(List<String> trendList) throws Exception{
+		try{
+			YtrendParam trendParam = new YtrendParam();
+			
+			trendParam.setHistory(this.getYesterdayDate());
+	        for(String trend:trendList){
+	        	trendParam.setMtTrend(trend);
+	        	this.insertTrend(trendParam);
+	        }
+		}catch(Exception e){
+			logger.error("TrendYServiceImpl::insertTrendList::Error = {}", e.getMessage());
+			return false;
+		}
+		return true;
+        
 	}
 
 	private void generateTrendToCsv(String filePath) throws Exception {
@@ -90,22 +113,35 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	        String line;
 	        // skip initial line
 	        line = br.readLine();
-	        while ((line = br.readLine()) != null) {
+	        int lineCount=0;
+	        // 5번째 트렌드까지만 리스트에 저장
+	        while ((line = br.readLine()) != null || lineCount<5) {
 	            trendList.add(line);
+	            lineCount++;
 	        }
 	    }
 	    
 	    return trendList;
 	}
 	
-	public boolean insertTrend(YtrendParam trendParam) throws SQLException{
+	private void insertTrend(YtrendParam trendParam) throws Exception{
+		
+		Map<String, Object> map = new HashMap<>();
 		
 		try{
+			String history = this.getYesterdayDate();
+			map.put("mtTrend", trendParam.getMtTrend());
+			map.put("history", history);
+			
+			int intResult = mDbDao.getMapper(MtrendDao.class).insertTrend(map);
+			
+			if (intResult<1){
+				throw new Error("insertTrend error");
+			}
 			
 		}catch(Exception e){
-			
+			logger.error("TrendYServiceImpl::insertTrend::Error = {}", e.getMessage());
+			throw e;
 		}
-		return true;
-		
 	}
 }

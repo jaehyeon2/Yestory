@@ -44,32 +44,31 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	
 	@Override
 	public String getGPTResponse(YnewsParam newsParam) throws Exception {
-        // 요청 본문 생성
+        
 		String fullPrompt = this.makePrompt(newsParam);
 		
         String requestBody = createRequestBody(fullPrompt);
 
-        // HTTP 연결 설정
+        // OpenAI API 연결 설정
         URL url = new URL(OPENAI_API_ENDPOINT_URL);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Authorization", "Bearer " + OPENAI_API_KEY);
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setDoOutput(true);
-
-        // 요청 본문 전송
+        
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = requestBody.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
-        // 응답 코드 확인
+        // 응답 정상 여부 확인
         int responseCode = connection.getResponseCode();
         if (responseCode != HttpURLConnection.HTTP_OK) {
             throw new IOException("Unexpected code " + responseCode);
         }
 
-        // 응답 본문 읽기
+        // 응답 받아오기
         StringBuilder response = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"))) {
             String responseLine;
@@ -77,12 +76,10 @@ public class GptYServiceImpl extends BasicService implements GptYService{
                 response.append(responseLine.trim());
             }
         }
-
-        // 응답 처리
-        logger.info("response = {}", response.toString());
-        return parseResponse(response.toString());
+        
+        String gptAnswer = parseResponse(response.toString());
+        return gptAnswer;
     }
-	
 	
 	private String makePrompt(YnewsParam newsParam){
 		
@@ -113,8 +110,8 @@ public class GptYServiceImpl extends BasicService implements GptYService{
         return json.toString();
     }
 
+    //responseBody에서 gptAnswer 추출
     private String parseResponse(String responseBody) {
-        // 응답 처리
         JSONObject json = new JSONObject(responseBody);
         JSONArray choices = json.getJSONArray("choices");
         JSONObject message = choices.getJSONObject(0).getJSONObject("message");

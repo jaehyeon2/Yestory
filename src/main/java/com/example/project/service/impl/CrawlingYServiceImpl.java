@@ -104,14 +104,13 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			
 		}catch(Exception e){
 			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
+			throw e;
 		}
 	}
 	
-	private boolean insertNaverNews(YnewsParam newsParam) throws Exception{
+	private void insertNaverNews(YnewsParam newsParam) throws Exception{
 		
-		Map<String, String> map = new HashMap<>();
-		logger.info("title = {}", newsParam.getMnTitle());
-		logger.info("content = {}", newsParam.getMnContent());
+		Map<String, Object> map = new HashMap<>();
 		try{
 			map.put("mtTrend", newsParam.getMtTrend());
 			map.put("mnTitle", newsParam.getMnTitle());
@@ -119,16 +118,14 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			map.put("mnUrl", newsParam.getMnUrl());
 			map.put("history", newsParam.getHistory());
 			
-			int result = mDbDao.getMapper(MnewsDao.class).insertNews(newsParam);
+			int result = mDbDao.getMapper(MnewsDao.class).insertNews(map);
 			if (result<1){
-				return false;
+				throw new Exception("insertNews error");
 			}
 			
 		}catch(Exception e){
 			logger.error("CrawlingServiceImpl::insertNaverNews::Error = {}", e.getMessage());
-			return false;
+			throw e;
 		}
-		return true;
-		
 	}
 }
