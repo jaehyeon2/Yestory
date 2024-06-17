@@ -15,6 +15,7 @@
 
 	<mappers>
 		<mapper resource="mapper/master/mNewsSql.xml" />
+		<mapper resource="mapper/master/mTrendSql.xml" />
 	</mappers>
 
 </configuration>
