@@ -3,16 +3,17 @@ package com.example.project.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.mybatis.spring.SqlSessionTemplate;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BasicService {
 	
 	@Autowired
-	protected SqlSessionTemplate sDbDao;
+	protected SqlSession mDbDao;
 	
 	@Autowired
-	protected SqlSessionTemplate mDbDao;
+	protected SqlSession sDbDao;
+	
 	
 	public String getYesterdayDate(){
 		String yesterdayString = 
