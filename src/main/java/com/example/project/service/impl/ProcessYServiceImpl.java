@@ -30,14 +30,18 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 	
 	@Override
 	public void executeProcess() throws Exception{
-		
-		List<String> trendList = trendYService.getGoogleSearchTrendList();
-		
-		
-		for (String trend:trendList){
-			logger.info("trend = {}", trend);
-			crawlingYService.crawlingNaverSearchNews(trend);
-			break;
+		try{
+			List<String> trendList = trendYService.getGoogleSearchTrendList();
+			
+			trendYService.insertTrendList(trendList);
+			
+			for (String trend:trendList){
+				logger.info("trend = {}", trend);
+				crawlingYService.crawlingNaverSearchNews(trend);
+				break;
+			}
+		}catch(Exception e){
+			logger.error("ProcessYServiceImpl::executeProcess::Error = {}", e.getMessage());
 		}
 		
 	}
