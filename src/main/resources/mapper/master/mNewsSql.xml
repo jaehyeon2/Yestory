@@ -27,6 +27,16 @@
 			'0'
 		)
 	</insert>
+	
+	<delete id="deleteNews" parameterType="map">
+		UPDATE
+			m_news
+		SET
+			mn_delete="1"
+		WHERE
+			mn_delete="0"
+		
+	</delete>
 
 	
 </mapper>

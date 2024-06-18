@@ -8,8 +8,10 @@ import com.example.project.beans.param.YnewsParam;
 
 public interface SNewsDao {
 	
-	public List<YnewsModel> selectNewsList(YnewsParam newsParam) throws SQLException;
+	public List<YnewsModel> selectNewsList(YnewsParam newsParam) throws Exception;
 	
-	public YnewsModel selectNews(YnewsParam newsParam) throws SQLException;
+	public YnewsModel selectNews(YnewsParam newsParam) throws Exception;
+	
+	public int deleteNews(YnewsParam newsParam) throws Exception;
 	
 }

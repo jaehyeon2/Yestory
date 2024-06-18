@@ -24,9 +24,9 @@
 	
 	<delete id="deleteTrend" parameterType="map">
 		UPDATE
-			mt_delete="1"
-		FROM
 			m_trend
+		SET
+			mt_delete="1"
 		WHERE
 			history=#{history} AND
 			mt_delete="0"
