@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<bean id="CRAWLING_NEWS_URL" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${crawling.news.url}"/>
+	</bean>
+	
+	<bean id="CRAWLING_NEWS_URL_PAGE" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${crawling.news.url.page}"/>
+	</bean>
+	
+	<bean id="CRAWLING_NEWS_URL_START" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${crawling.news.url.start}"/>
+	</bean>
+	
+	<bean id="CRAWLING_NEWS_URL_END" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${crawling.news.url.end}"/>
+	</bean>
+	
+	<bean id="CRAWLING_NEWS_USER_AGENT" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${crawling.news.user.agent}"/>
+	</bean>
+	
+</beans>
