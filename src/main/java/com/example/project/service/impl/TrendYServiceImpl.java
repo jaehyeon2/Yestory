@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.YtrendModel;
 import com.example.project.beans.param.YtrendParam;
 import com.example.project.dao.master.MtrendDao;
 import com.example.project.service.BasicService;
@@ -35,19 +36,19 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private String GOOGLE_TREND_PYTHON_FILE_PATH;
 	
 	@Override
-	public List<String> getGoogleSearchTrendList() throws Exception {
+	public boolean saveGoogleSearchTrendList() throws Exception {
 	    
 		List<String> trendList = new ArrayList<>();
-	    String yesterdayString = this.getYesterdayDate();
+	    String history = this.getYesterdayDate();
 	    
 	    try {
 	        
-	        logger.info("CrawlingServiceImpl::crawlGoogleSearchTrendList::yesterday = {}", yesterdayString);
+	        logger.info("CrawlingServiceImpl::crawlGoogleSearchTrendList::yesterday = {}", history);
 	        
 	        String filePath = new StringBuilder()
 	            .append(GOOGLE_TREND_FILE_PATH)
 	            .append(GOOGLE_TREND_FILE_NAME_HEAD)
-	            .append(yesterdayString)
+	            .append(history)
 	            .append(".csv")
 	            .toString();
 	        
@@ -57,12 +58,14 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	        }
 	        trendList = this.getTrendListFromCsv(filePath);
 	        
+	        this.insertTrendList(trendList);
+	        
 	    } catch (Exception e) {
 	        logger.error("CrawlingServiceImpl::crawlGoogleSearchTrendList::error = {}", e.getMessage(), e);
 	        throw e;
 	    }
 	    
-	    return trendList;
+	    return true;
 	}
 	
 	@Override
@@ -81,6 +84,41 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		}
 		return true;
         
+	}
+	
+	@Override
+	public List<YtrendModel> selectTrendList(YtrendParam trendParam) throws Exception{
+		List<YtrendModel> trendList = new ArrayList<>();
+		
+		Map<String, Object> map = new HashMap<>();
+		try{
+			map.put("history", trendParam.getHistory());
+			
+			trendList = mDbDao.getMapper(MtrendDao.class).selectTrendList(map);
+			
+		}catch(Exception e){
+			logger.error("TrendYServiceImpl::selectTrendList::Error = {}", e.getMessage());
+		}
+		
+		return trendList;
+	}
+	
+	@Override
+	public boolean deleteTrend(YtrendParam trendParam) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		try{
+			map.put("history", trendParam.getHistory());
+			
+			int intResult = mDbDao.getMapper(MtrendDao.class).deleteTrend(map);
+			if (intResult<1){
+				logger.info("TrendYServiceImpl::deleteTrend::trend is not exist. history = {}", trendParam.getHistory());
+			}
+		}catch(Exception e){
+			logger.error("TrendYServiceImpl::deleteTrend::Error = {}", e.getMessage());
+			throw e;
+			
+		}
+		return true;
 	}
 
 	private void generateTrendToCsv(String filePath) throws Exception {

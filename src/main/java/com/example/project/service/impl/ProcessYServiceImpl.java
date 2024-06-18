@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.YtrendModel;
+import com.example.project.beans.param.YtrendParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
 import com.example.project.service.ProcessYService;
@@ -31,13 +33,20 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 	@Override
 	public void executeProcess() throws Exception{
 		try{
-			List<String> trendList = trendYService.getGoogleSearchTrendList();
+			YtrendParam trendParam = new YtrendParam();
 			
-			trendYService.insertTrendList(trendList);
+			trendParam.setHistory(this.getYesterdayDate());
 			
-			for (String trend:trendList){
+//			initial trend history
+	        trendYService.deleteTrend(trendParam);
+			trendYService.saveGoogleSearchTrendList();
+			
+			
+			List<YtrendModel> trendList = trendYService.selectTrendList(trendParam);
+			
+			for (YtrendModel trend:trendList){
 				logger.info("trend = {}", trend);
-				crawlingYService.crawlingNaverSearchNews(trend);
+				crawlingYService.crawlingNaverSearchNews(trend.getMtTrend());
 				break;
 			}
 		}catch(Exception e){

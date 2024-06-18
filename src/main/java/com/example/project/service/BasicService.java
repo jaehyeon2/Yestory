@@ -15,7 +15,7 @@ public class BasicService {
 	protected SqlSession sDbDao;
 	
 	
-	public String getYesterdayDate(){
+	protected String getYesterdayDate(){
 		String yesterdayString = 
 				LocalDate.now()
 				.minusDays(1)
