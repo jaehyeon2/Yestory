@@ -9,13 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.YNewsModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.param.NewsParam;
+import com.example.project.beans.param.SummaryParam;
 import com.example.project.beans.param.TrendParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
+import com.example.project.service.GptYService;
 import com.example.project.service.NewsYService;
 import com.example.project.service.ProcessYService;
+import com.example.project.service.SummaryYService;
 import com.example.project.service.TrendYService;
 
 @EnableAsync
@@ -32,6 +36,12 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 	
 	@Autowired
 	private CrawlingYService crawlingYService;
+	
+	@Autowired
+	private GptYService gptYService;
+	
+	@Autowired
+	private SummaryYService summaryYService;
 	
 	@Override
 	public void executeProcess() throws Exception{
@@ -56,6 +66,27 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 			for (YTrendModel trend:trendList){
 				logger.info("trend = {}", trend);
 				crawlingYService.crawlingNaverNewsList(trend.getMtTrend());
+			}
+			
+			List<YNewsModel> newsList = newsYService.selectNewsList(newsParam);
+			
+			SummaryParam summaryParam = new SummaryParam();
+			summaryParam.setHistory(history);
+//			initial summary history
+			summaryYService.deleteSummary(summaryParam);
+//			save new summary list
+			for (YNewsModel news:newsList){
+				newsParam.setHistory(history);
+				newsParam.setMnTitle(news.getMnTitle());
+				newsParam.setMnContent(news.getMnContent());
+				
+				String summary = gptYService.getGPTResponse(newsParam);
+				
+				summaryParam.setMtTrend(news.getMnTitle());
+				summaryParam.setMsTitle(news.getMnTitle());
+				summaryParam.setMsSummary(summary);
+				summaryParam.setMsUrl(news.getMnUrl());
+				summaryYService.insertSummary(summaryParam);
 			}
 			
 			

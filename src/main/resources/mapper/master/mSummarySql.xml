@@ -23,6 +23,16 @@
 			'0'
 		)
 	</insert>
+	
+	<delete id="deleteSummary" parameterType="map">
+		UPDATE
+			m_summary
+		SET
+			ms_delete="1"
+		WHERE
+			history=#{history} AND
+			ms_delete="0"
+	</delete>
 
 	
 </mapper>

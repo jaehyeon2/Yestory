@@ -49,8 +49,10 @@ public class NewsYServiceImpl extends BasicService implements NewsYService {
 		try{
 			map.put("history", newsParam.getHistory());
 			
-			mDbDao.getMapper(MNewsDao.class).deleteNews(map);
-			
+			int intResult = mDbDao.getMapper(MNewsDao.class).deleteNews(map);
+			if (intResult<1){
+				logger.info("NewsYServiceImpl::deleteNews::news is not exist. history = {}", newsParam.getHistory());
+			}
 		}catch(Exception e){
 			logger.error("NewsYServiceImpl::deleteNews::Error = {}", e.getMessage());
 			throw e;
