@@ -1,1 +1,3 @@
-create user 'jaehyeon2'@'localhost' identified by '1q2w3e4r'
+CREATE USER 'yestory_user'@'localhost' IDENTIFIED BY '1q2w3e4r';
+GRANT ALL PRIVILEGES ON yestory.* TO 'yestory_user'@'localhost';
+FLUSH PRIVILEGES;

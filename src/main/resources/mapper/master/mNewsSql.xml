@@ -14,7 +14,7 @@
 			insert_date,
 			update_date,
 			mn_status,
-			mn_deleted
+			mn_delete
 		) VALUES (
 			#{mtTrend},
 			#{mnTitle},

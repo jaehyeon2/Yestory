@@ -10,9 +10,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import com.example.project.beans.model.YtrendModel;
+import com.example.project.beans.param.YnewsParam;
 import com.example.project.beans.param.YtrendParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
+import com.example.project.service.NewsYService;
 import com.example.project.service.ProcessYService;
 import com.example.project.service.TrendYService;
 
@@ -26,27 +28,34 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 	private TrendYService trendYService;
 	
 	@Autowired
+	private NewsYService newsYService;
+	
+	@Autowired
 	private CrawlingYService crawlingYService;
-	
-	
 	
 	@Override
 	public void executeProcess() throws Exception{
+		String history=this.getYesterdayDate();
+		
 		try{
 			YtrendParam trendParam = new YtrendParam();
-			
-			trendParam.setHistory(this.getYesterdayDate());
+			trendParam.setHistory(history);
 			
 //			initial trend history
-	        trendYService.deleteTrend(trendParam);
+//	        trendYService.deleteTrend(trendParam);
+//	        save new trend list
 			trendYService.saveGoogleSearchTrendList();
-			
 			
 			List<YtrendModel> trendList = trendYService.selectTrendList(trendParam);
 			
+			YnewsParam newsParam = new YnewsParam();
+			newsParam.setHistory(history);
+//			initial news history
+			newsYService.deleteNews(newsParam);
+//			save new news list
 			for (YtrendModel trend:trendList){
 				logger.info("trend = {}", trend);
-				crawlingYService.crawlingNaverSearchNews(trend.getMtTrend());
+				crawlingYService.crawlingNaverNewsList(trend.getMtTrend());
 				break;
 			}
 		}catch(Exception e){

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.example.project.beans.model.YtrendModel;
 import com.example.project.beans.param.YtrendParam;
 import com.example.project.dao.master.MtrendDao;
+import com.example.project.dao.slave.StrendDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.TrendYService;
 
@@ -94,7 +95,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		try{
 			map.put("history", trendParam.getHistory());
 			
-			trendList = mDbDao.getMapper(MtrendDao.class).selectTrendList(map);
+			trendList = mDbDao.getMapper(StrendDao.class).selectTrendList(map);
 			
 		}catch(Exception e){
 			logger.error("TrendYServiceImpl::selectTrendList::Error = {}", e.getMessage());

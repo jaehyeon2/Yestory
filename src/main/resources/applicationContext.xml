@@ -17,15 +17,16 @@
 	<!-- Set the base package -->
 	<context:component-scan base-package="com.example.project" />
 
-	<!-- Include the core service -->
+	<!-- constant bean -->
 	
 	<import resource="classpath:service/kakao.xml"/>
 	<import resource="classpath:service/google.xml"/>
 	<import resource="classpath:service/naver.xml"/>
 	<import resource="classpath:service/openAI.xml"/>
 	<import resource="classpath:service/prompt.xml"/>
+	<import resource="classpath:service/crawling.xml"/>
 	
-	<!-- Users -->
+	<!-- setting bean -->
 	<import resource="classpath:spring/mysql.xml"/>
 	<import resource="classpath:spring/dao.xml"/>
 	
