@@ -73,8 +73,8 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	public boolean insertTrendList(List<String> trendList) throws Exception{
 		try{
 			TrendParam trendParam = new TrendParam();
-			
 			trendParam.setHistory(this.getYesterdayDate());
+			
 	        for(String trend:trendList){
 	        	trendParam.setMtTrend(trend);
 	        	this.insertTrend(trendParam);
@@ -95,7 +95,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		try{
 			map.put("history", trendParam.getHistory());
 			
-			trendList = mDbDao.getMapper(STrendDao.class).selectTrendList(map);
+			trendList = sDbDao.getMapper(STrendDao.class).selectTrendList(map);
 			
 		}catch(Exception e){
 			logger.error("TrendYServiceImpl::selectTrendList::Error = {}", e.getMessage());
@@ -154,11 +154,12 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	        line = br.readLine();
 	        int lineCount=0;
 	        // 5번째 트렌드까지만 리스트에 저장
-	        while ((line = br.readLine()) != null || lineCount<5) {
+	        while ((line = br.readLine()) != null && lineCount<5) {
 	            trendList.add(line);
 	            lineCount++;
 	        }
 	    }
+	    logger.info("trendListSize = {}", trendList.size());
 	    
 	    return trendList;
 	}

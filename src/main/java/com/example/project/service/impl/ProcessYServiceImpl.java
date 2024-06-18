@@ -42,7 +42,7 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 			trendParam.setHistory(history);
 			
 //			initial trend history
-//	        trendYService.deleteTrend(trendParam);
+	        trendYService.deleteTrend(trendParam);
 //	        save new trend list
 			trendYService.saveGoogleSearchTrendList();
 			
@@ -56,7 +56,6 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 			for (YTrendModel trend:trendList){
 				logger.info("trend = {}", trend);
 				crawlingYService.crawlingNaverNewsList(trend.getMtTrend());
-				break;
 			}
 		}catch(Exception e){
 			logger.error("ProcessYServiceImpl::executeProcess::Error = {}", e.getMessage());
