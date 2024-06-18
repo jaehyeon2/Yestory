@@ -57,6 +57,8 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 				logger.info("trend = {}", trend);
 				crawlingYService.crawlingNaverNewsList(trend.getMtTrend());
 			}
+			
+			
 		}catch(Exception e){
 			logger.error("ProcessYServiceImpl::executeProcess::Error = {}", e.getMessage());
 		}

@@ -84,9 +84,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			}
 			logger.info("newsParamListSize = {}", newsParamList.size());
 			
-			
 			for(NewsParam newsParam:newsParamList){
-				
 				this.crawlingNaverNews(newsParam);
 			}
 			
