@@ -21,6 +21,16 @@
 			'0'
 		)
 	</insert>
+	
+	<delete id="deleteTrend" parameterType="map">
+		UPDATE
+			mt_delete="1"
+		FROM
+			m_trend
+		WHERE
+			history=#{history} AND
+			mt_delete="0"
+	</delete>
 
 	
 </mapper>
