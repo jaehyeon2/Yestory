@@ -8,10 +8,11 @@
 		SELECT
 			mt_trend,
 			mn_title,
-			mt_content,
+			mn_content,
+			mn_url,
 			history
 		FROM
-			m_trend
+			m_news
 		WHERE
 			history=#{history} AND
 			mn_delete="0"

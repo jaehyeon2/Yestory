@@ -2,16 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.project.dao.slave.SNewsDao">
+<mapper namespace="com.example.project.dao.slave.SSummaryDao">
 
-	<select id="selectNewsList" resultType="com.example.project.beans.model.YNewsModel">
+	<select id="selectSummaryList" resultType="com.example.project.beans.model.YSummaryModel">
 		SELECT
 			mt_trend,
-			mn_title,
-			mt_content,
+			ms_title,
+			ms_url,
+			ms_summary,
 			history
 		FROM
-			m_trend
+			m_summary
 		WHERE
 			history=#{history} AND
 			mn_delete="0"
