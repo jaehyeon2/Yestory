@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.param.YnewsParam;
+import com.example.project.beans.param.NewsParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.GptYService;
 
@@ -43,7 +43,7 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	private String TAIL_PROMPT;
 	
 	@Override
-	public String getGPTResponse(YnewsParam newsParam) throws Exception {
+	public String getGPTResponse(NewsParam newsParam) throws Exception {
         
 		String fullPrompt = this.makePrompt(newsParam);
 		
@@ -81,7 +81,7 @@ public class GptYServiceImpl extends BasicService implements GptYService{
         return gptAnswer;
     }
 	
-	private String makePrompt(YnewsParam newsParam){
+	private String makePrompt(NewsParam newsParam){
 		
 		String fullPrompt = new StringBuilder()
 				.append(HEAD_PROMPT)

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.param.YnewsParam;
+import com.example.project.beans.param.NewsParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
 import com.example.project.service.NewsYService;
@@ -43,7 +43,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	@Override
 	public void crawlingNaverNewsList(String trend) throws Exception {
 
-		List<YnewsParam> newsParamList = new ArrayList<>();
+		List<NewsParam> newsParamList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try{
@@ -72,7 +72,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 						break;
 					}
 					String newsUrl = link.attr("href");
-					YnewsParam newsParam = new YnewsParam();
+					NewsParam newsParam = new NewsParam();
 					newsParam.setMnUrl(newsUrl);
 					newsParam.setMtTrend(trend);
 					newsParamList.add(newsParam);
@@ -85,7 +85,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			logger.info("newsParamListSize = {}", newsParamList.size());
 			
 			
-			for(YnewsParam newsParam:newsParamList){
+			for(NewsParam newsParam:newsParamList){
 				
 				this.crawlingNaverNews(newsParam);
 			}
@@ -97,7 +97,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	}
 	
 	
-	private void crawlingNaverNews(YnewsParam newsParam) throws Exception{
+	private void crawlingNaverNews(NewsParam newsParam) throws Exception{
 		
 		try{
 

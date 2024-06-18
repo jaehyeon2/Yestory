@@ -1,10 +1,10 @@
 package com.example.project.service;
 
-import com.example.project.beans.param.YnewsParam;
+import com.example.project.beans.param.NewsParam;
 
 public interface NewsYService {
 
-	public boolean insertNews(YnewsParam newsParam) throws Exception;
+	public boolean insertNews(NewsParam newsParam) throws Exception;
 	
-	public boolean deleteNews(YnewsParam newsParam) throws Exception;
+	public boolean deleteNews(NewsParam newsParam) throws Exception;
 }

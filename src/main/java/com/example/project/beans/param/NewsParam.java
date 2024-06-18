@@ -1,6 +1,6 @@
 package com.example.project.beans.param;
 
-public class YnewsParam extends BasicParam{
+public class NewsParam extends BasicParam{
 
 	private String mnTitle;
 	private String mnContent;

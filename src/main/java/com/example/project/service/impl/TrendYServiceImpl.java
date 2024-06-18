@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.project.beans.model.YtrendModel;
-import com.example.project.beans.param.YtrendParam;
-import com.example.project.dao.master.MtrendDao;
-import com.example.project.dao.slave.StrendDao;
+import com.example.project.beans.model.YTrendModel;
+import com.example.project.beans.param.TrendParam;
+import com.example.project.dao.master.MTrendDao;
+import com.example.project.dao.slave.STrendDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.TrendYService;
 
@@ -72,7 +72,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Override
 	public boolean insertTrendList(List<String> trendList) throws Exception{
 		try{
-			YtrendParam trendParam = new YtrendParam();
+			TrendParam trendParam = new TrendParam();
 			
 			trendParam.setHistory(this.getYesterdayDate());
 	        for(String trend:trendList){
@@ -88,14 +88,14 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Override
-	public List<YtrendModel> selectTrendList(YtrendParam trendParam) throws Exception{
-		List<YtrendModel> trendList = new ArrayList<>();
+	public List<YTrendModel> selectTrendList(TrendParam trendParam) throws Exception{
+		List<YTrendModel> trendList = new ArrayList<>();
 		
 		Map<String, Object> map = new HashMap<>();
 		try{
 			map.put("history", trendParam.getHistory());
 			
-			trendList = mDbDao.getMapper(StrendDao.class).selectTrendList(map);
+			trendList = mDbDao.getMapper(STrendDao.class).selectTrendList(map);
 			
 		}catch(Exception e){
 			logger.error("TrendYServiceImpl::selectTrendList::Error = {}", e.getMessage());
@@ -105,12 +105,12 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	}
 	
 	@Override
-	public boolean deleteTrend(YtrendParam trendParam) throws Exception{
+	public boolean deleteTrend(TrendParam trendParam) throws Exception{
 		Map<String, Object> map = new HashMap<>();
 		try{
 			map.put("history", trendParam.getHistory());
 			
-			int intResult = mDbDao.getMapper(MtrendDao.class).deleteTrend(map);
+			int intResult = mDbDao.getMapper(MTrendDao.class).deleteTrend(map);
 			if (intResult<1){
 				logger.info("TrendYServiceImpl::deleteTrend::trend is not exist. history = {}", trendParam.getHistory());
 			}
@@ -163,7 +163,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	    return trendList;
 	}
 	
-	private void insertTrend(YtrendParam trendParam) throws Exception{
+	private void insertTrend(TrendParam trendParam) throws Exception{
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -172,7 +172,7 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 			map.put("mtTrend", trendParam.getMtTrend());
 			map.put("history", history);
 			
-			int intResult = mDbDao.getMapper(MtrendDao.class).insertTrend(map);
+			int intResult = mDbDao.getMapper(MTrendDao.class).insertTrend(map);
 			
 			if (intResult<1){
 				throw new Error("insertTrend error");

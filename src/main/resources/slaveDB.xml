@@ -14,7 +14,7 @@
  	</settings>
 
 	<mappers>
-		<!-- <mapper resource="mapper/mLoginSql.xml" />-->
+		<mapper resource="mapper/slave/sTrendSql.xml" />
 	</mappers>
 
 </configuration>

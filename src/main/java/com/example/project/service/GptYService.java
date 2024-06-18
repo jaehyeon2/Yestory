@@ -1,9 +1,9 @@
 package com.example.project.service;
 
-import com.example.project.beans.param.YnewsParam;
+import com.example.project.beans.param.NewsParam;
 
 public interface GptYService {
 
-	public String getGPTResponse(YnewsParam newsParam) throws Exception;
+	public String getGPTResponse(NewsParam newsParam) throws Exception;
 	
 }

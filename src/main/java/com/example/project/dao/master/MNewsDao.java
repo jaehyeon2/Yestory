@@ -2,7 +2,7 @@ package com.example.project.dao.master;
 
 import java.util.Map;
 
-public interface MnewsDao {
+public interface MNewsDao {
 	
 	public int insertNews(Map<String, Object> map) throws Exception;
 	

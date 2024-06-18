@@ -2,7 +2,7 @@ package com.example.project.dao.master;
 
 import java.util.Map;
 
-public interface MsummaryDao {
+public interface MSummaryDao {
 
 	public int insertSummary(Map<String, Object> map) throws Exception;
 	
