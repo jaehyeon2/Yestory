@@ -30,7 +30,7 @@ CREATE TABLE if NOT EXISTS yestory.m_summary
 	ms_no INTEGER NOT NULL AUTO_INCREMENT,
 	mt_trend VARCHAR(100) NOT NULL,
 	ms_title VARCHAR(100) NOT NULL,
-	ms_summary VARCHAR(1000) NOT NULL,
+	ms_summary VARCHAR(2000) NOT NULL,
 	ms_url VARCHAR(500) NOT NULL,
 	history VARCHAR(10) NOT NULL,
 	insert_date TIMESTAMP NOT NULL,
