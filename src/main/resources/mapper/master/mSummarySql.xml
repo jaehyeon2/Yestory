@@ -6,23 +6,37 @@
 
 	<insert id="insertSummary" parameterType="map">
 		INSERT INTO m_summary(
-			mt_no,
+			mt_trend,
 			ms_summary,
-			ms_history,
+			ms_title,
+			ms_url,
+			history,
 			insert_date,
 			update_date,
-			mn_status,
-			mn_delete
+			ms_status,
+			ms_delete
 		) VALUES (
-			#{mtNo},
+			#{mtTrend},
 			#{msSummary},
-			#{msHistory},
+			#{msTitle},
+			#{msUrl},
+			#{history},
 			now(),
 			now(),
 			null,
 			'0'
 		)
 	</insert>
+	
+	<delete id="deleteSummary" parameterType="map">
+		UPDATE
+			m_summary
+		SET
+			ms_delete="1"
+		WHERE
+			history=#{history} AND
+			ms_delete="0"
+	</delete>
 
 	
 </mapper>

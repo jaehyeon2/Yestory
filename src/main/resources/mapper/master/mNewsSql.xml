@@ -34,6 +34,7 @@
 		SET
 			mn_delete="1"
 		WHERE
+			history=#{history} AND
 			mn_delete="0"
 		
 	</delete>

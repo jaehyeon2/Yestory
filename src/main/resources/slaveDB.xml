@@ -14,7 +14,9 @@
  	</settings>
 
 	<mappers>
-		<mapper resource="mapper/slave/sTrendSql.xml" />
+		<mapper resource="mapper/slave/sTrendSql.xml"/>
+		<mapper resource="mapper/slave/sNewsSql.xml"/>
+		<mapper resource="mapper/slave/sSummarySql.xml"/>
 	</mappers>
 
 </configuration>

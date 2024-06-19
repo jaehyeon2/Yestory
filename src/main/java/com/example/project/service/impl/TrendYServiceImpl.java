@@ -89,16 +89,21 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
 	public List<YTrendModel> selectTrendList(TrendParam trendParam) throws Exception{
-		List<YTrendModel> trendList = new ArrayList<>();
+		List<YTrendModel> trendList = null;
 		
 		Map<String, Object> map = new HashMap<>();
 		try{
 			map.put("history", trendParam.getHistory());
 			
 			trendList = sDbDao.getMapper(STrendDao.class).selectTrendList(map);
+			if (trendList==null){
+				logger.error("TrendYServiceImpl::selectTrendList::Error = trend is not exist");
+				return null;
+			}
 			
 		}catch(Exception e){
 			logger.error("TrendYServiceImpl::selectTrendList::Error = {}", e.getMessage());
+			return null;
 		}
 		
 		return trendList;

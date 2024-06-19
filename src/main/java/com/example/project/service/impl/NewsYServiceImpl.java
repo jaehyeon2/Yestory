@@ -1,14 +1,18 @@
 package com.example.project.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.YNewsModel;
 import com.example.project.beans.param.NewsParam;
 import com.example.project.dao.master.MNewsDao;
+import com.example.project.dao.slave.SNewsDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.NewsYService;
 
@@ -45,13 +49,37 @@ public class NewsYServiceImpl extends BasicService implements NewsYService {
 		try{
 			map.put("history", newsParam.getHistory());
 			
-			mDbDao.getMapper(MNewsDao.class).deleteNews(map);
-			
+			int intResult = mDbDao.getMapper(MNewsDao.class).deleteNews(map);
+			if (intResult<1){
+				logger.info("NewsYServiceImpl::deleteNews::news is not exist. history = {}", newsParam.getHistory());
+			}
 		}catch(Exception e){
 			logger.error("NewsYServiceImpl::deleteNews::Error = {}", e.getMessage());
 			throw e;
 		}
 		return true;
+	}
+	
+	@Override
+	public List<YNewsModel> selectNewsList(NewsParam newsParam) throws Exception{
+		List<YNewsModel> newsList = null;
+		
+		Map<String, Object> map = new HashMap<>();
+		try{
+			map.put("history", newsParam.getHistory());
+			
+			newsList = sDbDao.getMapper(SNewsDao.class).selectNewsList(map);
+			
+			if (newsList==null){
+				logger.error("NewsYServiceImpl::selectNewsList::Error = news is not exist");
+				return null;
+			}
+			
+		}catch(Exception e){
+			logger.error("NewsYServiceImpl::selectNewsList::Error = {}", e.getMessage());
+			return null;
+		}
+		return newsList;
 	}
 
 }

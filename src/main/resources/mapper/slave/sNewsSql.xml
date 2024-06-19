@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.project.dao.slave.SNewsDao">
+
+	<select id="selectNewsList" resultType="com.example.project.beans.model.YNewsModel">
+		SELECT
+			mt_trend,
+			mn_title,
+			mn_content,
+			mn_url,
+			history
+		FROM
+			m_news
+		WHERE
+			history=#{history} AND
+			mn_delete="0"
+		ORDER BY
+			mn_no
+	</select>
+
+	
+</mapper>
