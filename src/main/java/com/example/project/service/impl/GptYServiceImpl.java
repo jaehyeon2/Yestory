@@ -37,7 +37,10 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 	private String HEAD_PROMPT;
 	
 	@Autowired
-	private String BODY_PROMPT;
+	private String BODY_PROMPT_TITLE;
+	
+	@Autowired
+	private String BODY_PROMPT_CONTENT;
 	
 	@Autowired
 	private String TAIL_PROMPT;
@@ -85,8 +88,9 @@ public class GptYServiceImpl extends BasicService implements GptYService{
 		
 		String fullPrompt = new StringBuilder()
 				.append(HEAD_PROMPT)
+				.append(BODY_PROMPT_TITLE)
 				.append(newsParam.getMnTitle())
-				.append(BODY_PROMPT)
+				.append(BODY_PROMPT_CONTENT)
 				.append(newsParam.getMnContent())
 				.append(TAIL_PROMPT)
 				.toString();

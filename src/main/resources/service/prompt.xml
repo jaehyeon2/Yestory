@@ -13,8 +13,12 @@
 		<constructor-arg value="${prompt.head}"/>
 	</bean>
 	
-	<bean id="BODY_PROMPT" class="java.lang.String" scope="singleton">
-		<constructor-arg value="${prompt.body}"/>
+	<bean id="BODY_PROMPT_TITLE" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${prompt.body.title}"/>
+	</bean>
+	
+	<bean id="BODY_PROMPT_CONTENT" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${prompt.body.content}"/>
 	</bean>
 	
 	<bean id="TAIL_PROMPT" class="java.lang.String" scope="singleton">
