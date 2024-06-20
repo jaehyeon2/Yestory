@@ -7,11 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.project.beans.param.NewsParam;
-import com.example.project.service.CrawlingYService;
-import com.example.project.service.GptYService;
 import com.example.project.service.ProcessYService;
-import com.example.project.service.TrendYService;
 
 @Controller
 @RequestMapping({"/", "", "/index"})
@@ -20,28 +16,22 @@ public class IndexController {
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	private TrendYService trendYService;
-	
-	@Autowired
 	private ProcessYService processYService;
-	
-	@Autowired
-	private GptYService gptYService;
-	
-	@Autowired
-	private CrawlingYService crawlingYService;
 	
 	@GetMapping("/")
 	public String index() throws Exception{
+		return "index";
+	}
+	
+	@GetMapping("/process")
+	public String process() throws Exception{
 		processYService.executeProcess();
 		return "index";
 	}
 	
 	@GetMapping("/gpt")
 	public String gptTest() throws Exception{
-		NewsParam newsParam = new NewsParam();
-		gptYService.getGPTResponse(newsParam);
-		
+		logger.info("gptTest");
 		return "index";
 		
 	}
