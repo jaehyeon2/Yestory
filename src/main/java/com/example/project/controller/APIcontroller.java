@@ -19,8 +19,8 @@ public class APIcontroller {
 		
 		YNewsModel news = new YNewsModel();
 		
-		news.setMnTitle("test");
-		
+		news.setMnTitle("title_test");
+		news.setMnContent("content_test");
 		return news;
 	}
 }
