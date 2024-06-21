@@ -4,12 +4,19 @@ public class YNewsModel extends BasicModel{
 	
 	private static final long serialVersionUID = 1L;
 	
+	private String mtTrend;
 	private String mnKeyword;
 	private String mnTitle;
 	private String mnContent;
 	private String mnUrl;
 	private String mnDate;
 	
+	public String getMtTrend() {
+		return mtTrend;
+	}
+	public void setMtTrend(String mtTrend) {
+		this.mtTrend = mtTrend;
+	}
 	public String getMnKeyword() {
 		return mnKeyword;
 	}

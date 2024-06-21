@@ -82,7 +82,7 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 				
 				String summary = gptYService.getGPTResponse(newsParam);
 				
-				summaryParam.setMtTrend(news.getMnTitle());
+				summaryParam.setMtTrend(news.getMtTrend());
 				summaryParam.setMsTitle(news.getMnTitle());
 				summaryParam.setMsSummary(summary);
 				summaryParam.setMsUrl(news.getMnUrl());

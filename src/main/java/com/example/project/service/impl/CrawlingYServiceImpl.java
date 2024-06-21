@@ -44,10 +44,10 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	public void crawlingNaverNewsList(String trend) throws Exception {
 
 		List<NewsParam> newsParamList = new ArrayList<>();
+		List<String> platformNumberList = new ArrayList<>();
 		String yesterdayString = LocalDate.now().minusDays(1).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		String todayString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 		try{
-			
 			for (int pageNum=1; pageNum<=10; pageNum++){
 				String url = new StringBuilder()
 						.append(CRAWLING_NEWS_URL).append(trend)
@@ -68,17 +68,23 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	
 				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
 				for (Element link: linkElements){
-					if (newsParamList.size()>=5){
+					if (platformNumberList.size()>=5){
 						break;
 					}
 					String newsUrl = link.attr("href");
+					String platformNumber = this.getPlatformNumber(newsUrl);
+					if (platformNumberList.contains(platformNumber)){
+						continue;
+					}
+					logger.info("platformNumber = {}", platformNumber);
+					platformNumberList.add(platformNumber);
 					NewsParam newsParam = new NewsParam();
 					newsParam.setMnUrl(newsUrl);
 					newsParam.setMtTrend(trend);
 					newsParamList.add(newsParam);
 					
 				}
-				if (newsParamList.size()>=5){
+				if (platformNumberList.size()>=5){
 					break;
 				}
 			}
@@ -92,6 +98,12 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			logger.error("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Error = {}", e.getMessage());
 			throw e;
 		}
+	}
+	
+	private String getPlatformNumber(String url) throws Exception{
+		//url - https://n.news.naver.com/article/platformNumber/articleNumber
+		String platformNumber = url.split("/")[5];
+		return platformNumber;
 	}
 	
 	
