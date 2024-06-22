@@ -9,12 +9,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 	
-	<bean id="KAKAO_API_KEY" class="java.lang.String" scope="singleton">
-		<constructor-arg value="${kakao.api.key}"/>
-	</bean>
-	
-	<bean id="KAKAO_API_ENDPOINT_URL" class="java.lang.String" scope="singleton">
-		<constructor-arg value="${kakao.api.endpoint.url}"/>
+	<bean id="KAKAO_CHATBOT_SKILL_VERSION" class="java.lang.String" scope="singleton">
+		<constructor-arg value="${kakao.chatbot.skill.version}"/>
 	</bean>
 	
 </beans>
