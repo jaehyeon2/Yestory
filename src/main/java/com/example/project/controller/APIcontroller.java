@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YNewsModel;
+import com.example.project.beans.param.RequestParam;
+import com.example.project.beans.param.request.Action;
 
 @Controller
 @RequestMapping("/api")
@@ -26,8 +28,14 @@ public class APIcontroller {
 	
 	@RequestMapping(value={"/request"}, headers="Accept=application/json", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseModel test(@RequestBody String request) throws Exception{
-		logger.info("apiRequest");
+	public ResponseModel test(@RequestBody RequestParam requestParam) throws Exception{
+		
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		
+		logger.info(paramsMap.toString());
+		logger.info("param1 = {}", paramsMap.get("param1"));
+		logger.info("param2 = {}", paramsMap.get("param2"));
+		
 		ResponseModel response = new ResponseModel();
 		
 		Map<String, String> text= new HashMap<>();
