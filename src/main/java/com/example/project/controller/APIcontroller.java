@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,8 +18,10 @@ import com.example.project.beans.model.YNewsModel;
 import com.example.project.beans.param.RequestParam;
 import com.example.project.beans.param.request.Action;
 
+import jakarta.validation.Valid;
+
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/request")
 public class APIcontroller {
 	
 	final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -26,9 +29,35 @@ public class APIcontroller {
 	@Autowired
 	private String KAKAO_CHATBOT_SKILL_VERSION;
 	
-	@RequestMapping(value={"/request"}, headers="Accept=application/json", method=RequestMethod.POST)
+	@PostMapping(value={"/test"})
 	@ResponseBody
-	public ResponseModel test(@RequestBody RequestParam requestParam) throws Exception{
+	public ResponseModel request(@RequestBody RequestParam requestParam) throws Exception{
+		
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		
+		logger.info(paramsMap.toString());
+		
+		ResponseModel response = new ResponseModel();
+		
+		Map<String, String> text= new HashMap<>();
+		Map<String, Object> simpleText = new HashMap<>();
+		text.put("text", "/api/request");
+		simpleText.put("simpleText", text);
+		
+		Map<String, Object> outputs = new HashMap<>();
+		
+		outputs.put("outputs", simpleText);
+		
+		response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+		response.setTemplate(outputs);
+		
+		System.out.println("response = " + response);
+		return response;
+	}
+	
+	@PostMapping(value={"/summary"})
+	@ResponseBody
+	public ResponseModel summaryRequest(@RequestBody RequestParam requestParam) throws Exception{
 		
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
 		
@@ -40,13 +69,12 @@ public class APIcontroller {
 		
 		Map<String, String> text= new HashMap<>();
 		Map<String, Object> simpleText = new HashMap<>();
-		text.put("text", "test_text");
+		text.put("text", "/api/request/summary");
 		simpleText.put("simpleText", text);
 		
 		Map<String, Object> outputs = new HashMap<>();
 		
 		outputs.put("outputs", simpleText);
-		
 		
 		response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
 		response.setTemplate(outputs);
