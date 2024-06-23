@@ -20,4 +20,21 @@
 			mn_no
 	</select>
 	
+	<select id="selectSummary" resultType="com.example.project.beans.model.YSummaryModel">
+		SELECT
+			
+			ms_url,
+			ms_summary
+		FROM
+			m_summary
+		WHERE
+			mt_rend=#{mtTrend} AND
+			history=#{history} AND
+			mn_delete="0"
+		ORDER BY
+			mn_no
+		LIMIT
+			#{number}, 1 
+	</select>
+	
 </mapper>
