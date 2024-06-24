@@ -31,6 +31,4 @@ public class SummaryParam extends BasicParam{
 	public void setMsUrl(String msUrl) {
 		this.msUrl = msUrl;
 	}
-	
-	
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.param.SummaryParam;
 import com.example.project.dao.master.MSummaryDao;
+import com.example.project.dao.slave.SSummaryDao;
 import com.example.project.service.BasicService;
 import com.example.project.service.SummaryYService;
 
@@ -61,6 +62,26 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 	public List<YSummaryModel> selectSummaryList(SummaryParam summaryParam) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public YSummaryModel selectSummary(SummaryParam summaryParam) throws Exception{
+		YSummaryModel summary = null;
+		Map<String, Object> map = new HashMap<>();
+		try{
+			map.put("history", this.getYesterdayDate());
+			map.put("mtTrend", summaryParam.getMtTrend());
+			map.put("number", summaryParam.getNumber());
+			
+			summary = sDbDao.getMapper(SSummaryDao.class).selectSummary(map);
+			if (summary==null){
+				logger.error("SummaryYServiceImpl::selectSummary::Error = summary is not exist");
+				return null;
+			}
+		}catch(Exception e){
+			logger.error("SummaryYServiceImpl::selectSummary::Error = {}", e.getMessage());
+		}
+		return summary;
 	}
 
 }

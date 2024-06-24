@@ -72,6 +72,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 						break;
 					}
 					String newsUrl = link.attr("href");
+					//연예, 스포츠 기사인 경우 로직 분리 필요
 					String platformNumber = this.getPlatformNumber(newsUrl);
 					if (platformNumberList.contains(platformNumber)){
 						continue;
