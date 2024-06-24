@@ -1,5 +1,7 @@
 package com.example.project.beans.param;
 
+import java.util.List;
+
 import com.example.project.beans.param.request.Action;
 import com.example.project.beans.param.request.Bot;
 import com.example.project.beans.param.request.Intent;
@@ -12,6 +14,7 @@ public class RequestParam {
 	private UserRequest userRequest;
 	private Bot bot;
 	private Action action;
+	private List<Object> contexts;
 	
 	public Intent getIntent() {
 		return intent;
@@ -36,6 +39,12 @@ public class RequestParam {
 	}
 	public void setAction(Action action) {
 		this.action = action;
+	}
+	public List<Object> getContexts() {
+		return contexts;
+	}
+	public void setContexts(List<Object> contexts) {
+		this.contexts = contexts;
 	}
 	
 	

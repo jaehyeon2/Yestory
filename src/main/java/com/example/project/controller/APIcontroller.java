@@ -1,6 +1,8 @@
 package com.example.project.controller;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YNewsModel;
+import com.example.project.beans.model.response.Template;
+import com.example.project.beans.model.response.template.Output;
+import com.example.project.beans.model.response.template.output.SimpleText;
 import com.example.project.beans.param.RequestParam;
 import com.example.project.beans.param.request.Action;
 
@@ -35,23 +40,29 @@ public class APIcontroller {
 		
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
 		
-		logger.info(paramsMap.toString());
+		logger.info(requestParam.toString());
 		
-		ResponseModel response = new ResponseModel();
-		
-		Map<String, String> text= new HashMap<>();
-		Map<String, Object> simpleText = new HashMap<>();
-		text.put("text", "/api/request");
-		simpleText.put("simpleText", text);
-		
-		Map<String, Object> outputs = new HashMap<>();
-		
-		outputs.put("outputs", simpleText);
-		
-		response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-		response.setTemplate(outputs);
-		
-		System.out.println("response = " + response);
+		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.";
+
+        // ResponseModel 객체 생성
+        ResponseModel response = new ResponseModel();
+
+        // SimpleText 객체 생성 및 설정
+        SimpleText simpleText = new SimpleText();
+        simpleText.setText(responseText);
+
+        // Output 객체 생성 및 SimpleText 설정
+        Output output = new Output();
+        output.setSimpleText(simpleText);
+
+        // Template 객체 생성 및 Output 설정
+        Template template = new Template();
+        template.setOutputs(Collections.singletonList(output));
+
+        // ResponseModel 설정
+        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+        response.setTemplate(template);
+        
 		return response;
 	}
 	
@@ -65,21 +76,27 @@ public class APIcontroller {
 		logger.info("param1 = {}", paramsMap.get("param1"));
 		logger.info("param2 = {}", paramsMap.get("param2"));
 		
-		ResponseModel response = new ResponseModel();
-		
-		Map<String, String> text= new HashMap<>();
-		Map<String, Object> simpleText = new HashMap<>();
-		text.put("text", "/api/request/summary");
-		simpleText.put("simpleText", text);
-		
-		Map<String, Object> outputs = new HashMap<>();
-		
-		outputs.put("outputs", simpleText);
-		
-		response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-		response.setTemplate(outputs);
-		
-		System.out.println("response = " + response);
+		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.2";
+
+        // ResponseModel 객체 생성
+        ResponseModel response = new ResponseModel();
+
+        // SimpleText 객체 생성 및 설정
+        SimpleText simpleText = new SimpleText();
+        simpleText.setText(responseText);
+
+        // Output 객체 생성 및 SimpleText 설정
+        Output output = new Output();
+        output.setSimpleText(simpleText);
+
+        // Template 객체 생성 및 Output 설정
+        Template template = new Template();
+        template.setOutputs(Collections.singletonList(output));
+
+        // ResponseModel 설정
+        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+        response.setTemplate(template);
+        
 		return response;
 	}
 }
