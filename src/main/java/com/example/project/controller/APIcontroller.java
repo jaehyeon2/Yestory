@@ -39,9 +39,7 @@ public class APIcontroller {
 	public ResponseModel request(@RequestBody RequestParam requestParam) throws Exception{
 		
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
-		
-		logger.info(requestParam.toString());
-		
+		logger.info("APIController::request::info = test");
 		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.";
 
         // ResponseModel 객체 생성
@@ -71,10 +69,6 @@ public class APIcontroller {
 	public ResponseModel summaryRequest(@RequestBody RequestParam requestParam) throws Exception{
 		
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
-		
-		logger.info(paramsMap.toString());
-		logger.info("param1 = {}", paramsMap.get("param1"));
-		logger.info("param2 = {}", paramsMap.get("param2"));
 		
 		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.2";
 
