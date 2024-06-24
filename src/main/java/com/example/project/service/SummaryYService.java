@@ -10,4 +10,5 @@ public interface SummaryYService {
 	public boolean insertSummary(SummaryParam summaryParam) throws Exception;
 	public boolean deleteSummary(SummaryParam summaryParam) throws Exception;
 	public List<YSummaryModel> selectSummaryList(SummaryParam summaryParam) throws Exception;
+	public YSummaryModel selectSummary(SummaryParam summaryParam) throws Exception;
 }

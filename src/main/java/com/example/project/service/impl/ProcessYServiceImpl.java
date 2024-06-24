@@ -88,6 +88,7 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 				summaryParam.setMsUrl(news.getMnUrl());
 				summaryYService.insertSummary(summaryParam);
 			}
+			logger.info("ProcessYServiceImpl::executeProcess::info = serial process is successfully finish");
 			
 			
 		}catch(Exception e){
