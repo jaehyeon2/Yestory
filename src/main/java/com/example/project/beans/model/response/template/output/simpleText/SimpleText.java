@@ -1,4 +1,4 @@
-package com.example.project.beans.model.response.template.output;
+package com.example.project.beans.model.response.template.output.simpleText;
 
 public class SimpleText {
 	private String text;
