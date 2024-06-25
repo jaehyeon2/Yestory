@@ -1,4 +1,4 @@
-package com.example.project.beans.model.response.template.output.carousel.item;
+package com.example.project.beans.model.response.template.output.basicCard.carousel.item;
 
 public class Button {
 	private String action;

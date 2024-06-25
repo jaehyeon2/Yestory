@@ -1,9 +1,9 @@
-package com.example.project.beans.model.response.template.output.carousel;
+package com.example.project.beans.model.response.template.output.basicCard.carousel;
 
 import java.util.List;
 import java.util.Map;
 
-import com.example.project.beans.model.response.template.output.carousel.item.Button;
+import com.example.project.beans.model.response.template.output.basicCard.carousel.item.Button;
 
 public class Item {
 	private String title;

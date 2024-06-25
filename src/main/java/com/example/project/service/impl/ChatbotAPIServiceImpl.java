@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
-import com.example.project.beans.model.response.template.output.Carousel;
-import com.example.project.beans.model.response.template.output.SimpleText;
-import com.example.project.beans.model.response.template.output.carousel.Item;
+import com.example.project.beans.model.response.template.output.basicCard.Carousel;
+import com.example.project.beans.model.response.template.output.simpleText.SimpleText;
+import com.example.project.beans.model.response.template.output.basicCard.carousel.Item;
 import com.example.project.beans.model.response.template.outputType.OutputBasicCard;
 import com.example.project.beans.model.response.template.outputType.OutputText;
 import com.example.project.beans.param.RequestParam;
@@ -41,7 +41,6 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
         // ResponseModel 객체 생성
         ResponseModel response = new ResponseModel();
         try{
-	        
 	        
 	        TrendParam trendParam = new TrendParam();
 	        

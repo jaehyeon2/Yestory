@@ -1,7 +1,7 @@
 package com.example.project.beans.model.response.template.outputType;
 
 import com.example.project.beans.model.response.template.Output;
-import com.example.project.beans.model.response.template.output.Carousel;
+import com.example.project.beans.model.response.template.output.basicCard.Carousel;
 
 public class OutputBasicCard extends Output{
 
