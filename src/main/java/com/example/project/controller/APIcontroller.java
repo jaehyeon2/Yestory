@@ -47,7 +47,7 @@ public class APIcontroller {
 	@ResponseBody
 	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
 		
-		ResponseModel response = chatbotAPIService.getResponseOfTrend(requestParam);
+		ResponseModel response = chatbotAPIService.getResponseOfTrendList(requestParam);
 
         return response;
     }

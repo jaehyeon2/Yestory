@@ -2,11 +2,11 @@ package com.example.project.beans.model.response.template.output.basicCard;
 
 import java.util.List;
 
-import com.example.project.beans.model.response.template.output.basicCard.carousel.Item;
+import com.example.project.beans.model.response.template.output.basicCard.carousel.BasicItem;
 
 public class Carousel {
 	private String type;
-	private List<Item> items;
+	private List<BasicItem> items;
 	
 	public String getType() {
 		return type;
@@ -14,10 +14,10 @@ public class Carousel {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public List<Item> getItems() {
+	public List<BasicItem> getItems() {
 		return items;
 	}
-	public void setItems(List<Item> items) {
+	public void setItems(List<BasicItem> items) {
 		this.items = items;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.example.project.beans.model.response.template.output.basicCard.carousel.item.Button;
 
-public class Item {
+public class BasicItem {
 	private String title;
 	private String description;
 	private Map<String, Object> thumbnail;

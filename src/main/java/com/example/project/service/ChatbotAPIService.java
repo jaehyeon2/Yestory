@@ -7,4 +7,5 @@ public interface ChatbotAPIService {
 
 	public ResponseModel getResponseOfText(RequestParam requestParam) throws Exception;
 	public ResponseModel getResponseOfTrend(RequestParam requestParam) throws Exception;
+	public ResponseModel getResponseOfTrendList(RequestParam requestParam) throws Exception;
 }

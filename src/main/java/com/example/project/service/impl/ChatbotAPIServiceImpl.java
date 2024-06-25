@@ -15,14 +15,19 @@ import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
 import com.example.project.beans.model.response.template.output.basicCard.Carousel;
 import com.example.project.beans.model.response.template.output.simpleText.SimpleText;
-import com.example.project.beans.model.response.template.output.basicCard.carousel.Item;
+import com.example.project.beans.model.response.template.output.basicCard.carousel.BasicItem;
+import com.example.project.beans.model.response.template.output.listCard.Header;
+import com.example.project.beans.model.response.template.output.listCard.ListCard;
+import com.example.project.beans.model.response.template.output.listCard.ListItem;
 import com.example.project.beans.model.response.template.outputType.OutputBasicCard;
+import com.example.project.beans.model.response.template.outputType.OutputListCard;
 import com.example.project.beans.model.response.template.outputType.OutputText;
 import com.example.project.beans.param.RequestParam;
 import com.example.project.beans.param.TrendParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.ChatbotAPIService;
 import com.example.project.service.TrendYService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPIService{
@@ -34,50 +39,6 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	
 	@Autowired
 	private TrendYService trendYService;
-	
-	@Override
-	public ResponseModel getResponseOfTrend(RequestParam requestParam) throws Exception {
-
-        // ResponseModel 객체 생성
-        ResponseModel response = new ResponseModel();
-        try{
-	        
-	        TrendParam trendParam = new TrendParam();
-	        
-	        trendParam.setHistory(this.getYesterdayDate());
-	        
-	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
-	
-	        List<Item> items = new ArrayList<>();
-	        
-	        for (YTrendModel trend:trendList){
-	        	Item item = new Item();
-	        	item.setTitle("trend");
-	        	item.setDescription(trend.getMtTrend());
-	        	items.add(item);
-	        }
-	
-	        Carousel carousel = new Carousel();
-	        carousel.setType("basicCard");
-	        carousel.setItems(items);
-	
-	        // Output 객체 생성 및 설정
-	        OutputBasicCard output = new OutputBasicCard();
-	        output.setCarousel(carousel);
-	
-	        // Template 객체 생성 및 Output 설정
-	        Template template = new Template();
-	        template.setOutputs(Collections.singletonList(output));
-	
-	        // ResponseModel 설정
-	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-	        response.setTemplate(template);
-        }catch(Exception e){
-        	logger.error("ChatbotAPIServiceImpl::getResponseOfTrend::Error = {}", e.getMessage());
-        	response = this.getErrorMessage();
-        }
-		return response;
-	}
 
 	@Override
 	public ResponseModel getResponseOfText(RequestParam requestParam) throws Exception {
@@ -110,6 +71,91 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
         	response = this.getErrorMessage();
         }
 		return response;
+	}
+	
+	@Override
+	public ResponseModel getResponseOfTrend(RequestParam requestParam) throws Exception {
+
+        // ResponseModel 객체 생성
+        ResponseModel response = new ResponseModel();
+        try{
+	        
+	        TrendParam trendParam = new TrendParam();
+	        
+	        trendParam.setHistory(this.getYesterdayDate());
+	        
+	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
+	
+	        List<BasicItem> items = new ArrayList<>();
+	        
+	        for (YTrendModel trend:trendList){
+	        	BasicItem item = new BasicItem();
+	        	item.setTitle("trend");
+	        	item.setDescription(trend.getMtTrend());
+	        	items.add(item);
+	        }
+	
+	        Carousel carousel = new Carousel();
+	        carousel.setType("basicCard");
+	        carousel.setItems(items);
+	
+	        // Output 객체 생성 및 설정
+	        OutputBasicCard output = new OutputBasicCard();
+	        output.setCarousel(carousel);
+	
+	        // Template 객체 생성 및 Output 설정
+	        Template template = new Template();
+	        template.setOutputs(Collections.singletonList(output));
+	
+	        // ResponseModel 설정
+	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+	        response.setTemplate(template);
+        }catch(Exception e){
+        	logger.error("ChatbotAPIServiceImpl::getResponseOfTrend::Error = {}", e.getMessage());
+        	response = this.getErrorMessage();
+        }
+		return response;
+	}
+	
+	@Override
+	public ResponseModel getResponseOfTrendList(RequestParam requestParam) throws Exception {
+	    ResponseModel response = new ResponseModel();
+	    try {
+	        TrendParam trendParam = new TrendParam();
+	        trendParam.setHistory(this.getYesterdayDate());
+	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
+
+	        Header header = new Header();
+	        header.setTitle("트렌드 리스트");
+
+	        List<ListItem> items = new ArrayList<>();
+	        for (YTrendModel trend : trendList) {
+	            ListItem item = new ListItem();
+	            item.setTitle("트렌드");
+	            item.setDescription(trend.getMtTrend());
+	            items.add(item);
+	        }
+	        logger.info("itemsSize = {}", items.size());
+	        ListCard listCard = new ListCard();
+	        listCard.setHeader(header);
+	        listCard.setItems(items);
+
+	        OutputListCard output = new OutputListCard();
+	        output.setListCard(listCard);
+	        
+	        Template template = new Template();
+	        template.setOutputs(Collections.singletonList(output));
+
+	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+	        response.setTemplate(template);
+	        ObjectMapper mapper = new ObjectMapper();
+	        String jsonString = mapper.writeValueAsString(response);
+	        logger.info(jsonString);
+	    } catch (Exception e) {
+	        logger.error("ChatbotAPIServiceImpl::getResponseOfTrendList::Error = {}", e.getMessage());
+	        response = this.getErrorMessage(); // 예외 처리 시 오류 응답 반환
+	    }
+	    return response;
 	}
 	
 	private ResponseModel getErrorMessage() throws Exception{
