@@ -1,8 +1,5 @@
 package com.example.project.beans.model;
 
-import java.util.List;
-import java.util.Map;
-
 import com.example.project.beans.model.response.Template;
 
 public class ResponseModel {

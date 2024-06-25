@@ -1,0 +1,11 @@
+package com.example.project.service;
+
+import com.example.project.beans.model.ResponseModel;
+import com.example.project.beans.param.RequestParam;
+
+public interface ChatbotAPIService {
+
+	public ResponseModel getResponseOfText(RequestParam requestParam) throws Exception;
+	public ResponseModel getResponseOfTrend(RequestParam requestParam) throws Exception;
+	public ResponseModel getResponseOfTrendList(RequestParam requestParam) throws Exception;
+}
