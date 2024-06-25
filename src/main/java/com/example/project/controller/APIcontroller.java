@@ -27,6 +27,7 @@ import com.example.project.beans.model.response.template.outputType.OutputBasicC
 import com.example.project.beans.model.response.template.outputType.OutputText;
 import com.example.project.beans.param.RequestParam;
 import com.example.project.beans.param.request.Action;
+import com.example.project.service.ChatbotAPIService;
 
 import jakarta.validation.Valid;
 
@@ -39,31 +40,15 @@ public class APIcontroller {
 	@Autowired
 	private String KAKAO_CHATBOT_SKILL_VERSION;
 	
+	@Autowired
+	private ChatbotAPIService chatbotAPIService;
+	
 	@PostMapping(value={"/test"})
 	@ResponseBody
 	public ResponseModel request(@RequestBody RequestParam requestParam) throws Exception{
 		
-		logger.info("APIController::request::info = test");
-		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.";
-
-        // ResponseModel 객체 생성
-        ResponseModel response = new ResponseModel();
-
-        // SimpleText 객체 생성 및 설정
-        SimpleText simpleText = new SimpleText();
-        simpleText.setText(responseText);
-
-        // Output 객체 생성 및 SimpleText 설정
-        OutputText output = new OutputText();
-        output.setSimpleText(simpleText);
-
-        // Template 객체 생성 및 Output 설정
-        Template template = new Template();
-        template.setOutputs(Collections.singletonList(output));
-
-        // ResponseModel 설정
-        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-        response.setTemplate(template);
+		ResponseModel response = new ResponseModel();
+		response = chatbotAPIService.getResponseOfText(requestParam);
         
 		return response;
 	}
@@ -72,28 +57,8 @@ public class APIcontroller {
 	@ResponseBody
 	public ResponseModel summaryRequest(@RequestBody RequestParam requestParam) throws Exception{
 		
-		Map<String, Object> paramsMap = requestParam.getAction().getParams();
-		logger.info("paramsMap = ", paramsMap.toString());
-		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.2";
-
-        // ResponseModel 객체 생성
-        ResponseModel response = new ResponseModel();
-
-        // SimpleText 객체 생성 및 설정
-        SimpleText simpleText = new SimpleText();
-        simpleText.setText(responseText);
-
-        // Output 객체 생성 및 SimpleText 설정
-        OutputText output = new OutputText();
-        output.setSimpleText(simpleText);
-
-        // Template 객체 생성 및 Output 설정
-        Template template = new Template();
-        template.setOutputs(Collections.singletonList(output));
-
-        // ResponseModel 설정
-        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-        response.setTemplate(template);
+		ResponseModel response = new ResponseModel();
+		response = chatbotAPIService.getResponseOfText(requestParam);
         
 		return response;
 	}
@@ -101,47 +66,8 @@ public class APIcontroller {
 	@PostMapping(value={"/trend"})
 	@ResponseBody
 	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
-        Map<String, Object> paramsMap = requestParam.getAction().getParams();
-
-        String responseText = "trend!";
-        logger.info("trend!!!");
-
-        // ResponseModel 객체 생성
-        ResponseModel response = new ResponseModel();
-
-        // SimpleText 객체 생성 및 설정
-        SimpleText simpleText = new SimpleText();
-        simpleText.setText(responseText);
-
-        // Carousel 및 Item 객체 생성
-        Item item1 = new Item();
-        Item item2 = new Item();
-
-        item1.setTitle("title1");
-        item1.setDescription("description1");
-
-        item2.setTitle("title2");
-        item2.setDescription("description2");
-
-        List<Item> items = new ArrayList<>();
-        items.add(item1);
-        items.add(item2);
-
-        Carousel carousel = new Carousel();
-        carousel.setType("basicCard");
-        carousel.setItems(items);
-
-        // Output 객체 생성 및 설정
-        OutputBasicCard output = new OutputBasicCard();
-        output.setCarousel(carousel);
-
-        // Template 객체 생성 및 Output 설정
-        Template template = new Template();
-        template.setOutputs(Collections.singletonList(output));
-
-        // ResponseModel 설정
-        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-        response.setTemplate(template);
+		
+		ResponseModel response = chatbotAPIService.getResponseOfTrend(requestParam);
 
         return response;
     }
