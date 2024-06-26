@@ -1,17 +1,25 @@
 package com.example.project.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.project.beans.model.ResponseModel;
+import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.param.RequestParam;
+import com.example.project.beans.param.SummaryParam;
 import com.example.project.service.ChatbotAPIService;
+import com.example.project.service.SummaryYService;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -23,12 +31,15 @@ public class APIcontroller {
 	@Autowired
 	private ChatbotAPIService chatbotAPIService;
 	
+	@Autowired
+	private SummaryYService summaryYService;
+	
 	@PostMapping(value={"/test"})
 	@ResponseBody
 	public ResponseModel request(@RequestBody RequestParam requestParam) throws Exception{
 		
 		ResponseModel response = new ResponseModel();
-		response = chatbotAPIService.getResponseOfText(requestParam);
+		response = chatbotAPIService.getResponseOfText(requestParam, "simpleTextTest");
         
 		return response;
 	}
@@ -37,8 +48,7 @@ public class APIcontroller {
 	@ResponseBody
 	public ResponseModel summaryRequest(@RequestBody RequestParam requestParam) throws Exception{
 		
-		ResponseModel response = new ResponseModel();
-		response = chatbotAPIService.getResponseOfText(requestParam);
+		ResponseModel response = chatbotAPIService.getResponseOfText(requestParam, "summaryTest");
         
 		return response;
 	}
@@ -51,4 +61,38 @@ public class APIcontroller {
 
         return response;
     }
+	
+	@GetMapping(value={"/summaryTest"})
+	public void summaryTest(@Valid SummaryParam summaryParam) throws Exception{
+		summaryParam.setMtTrend("소설가 정지돈");
+		summaryParam.setNumber("1");
+		
+		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
+		logger.info("APIController::summaryTest::mtTrend = {}", summary.getMtTrend());
+		logger.info("APIController::summaryTest::msTitle = {}", summary.getMsTitle());
+		logger.info("APIController::summaryTest::msSummary = {}", summary.getMsSummary());
+		
+		
+		
+	}
+	@PostMapping(value={"/summaryPost"})
+	@ResponseBody
+	public ResponseModel summaryPostRequest(@RequestBody RequestParam requestParam) throws Exception{
+		
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		logger.info("trendParam = {}", paramsMap.get("trend").toString());
+		logger.info("numberParam = {}", paramsMap.get("number").toString());
+		
+		SummaryParam summaryParam = new SummaryParam();
+		summaryParam.setMtTrend(paramsMap.get("trend").toString());
+		summaryParam.setNumber(paramsMap.get("number").toString());
+		
+		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
+		
+		ResponseModel response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
+		
+		
+		
+		return response;
+	}
 }
