@@ -72,8 +72,6 @@ public class APIcontroller {
 		logger.info("APIController::summaryTest::msTitle = {}", summary.getMsTitle());
 		logger.info("APIController::summaryTest::msSummary = {}", summary.getMsSummary());
 		
-		
-		
 	}
 	@PostMapping(value={"/summaryPost"})
 	@ResponseBody
@@ -95,9 +93,6 @@ public class APIcontroller {
 		}else{
 			response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
 		}
-		
-		
-		
 		
 		return response;
 	}

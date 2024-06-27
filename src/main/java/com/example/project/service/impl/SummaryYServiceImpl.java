@@ -1,5 +1,6 @@
 package com.example.project.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +61,23 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 
 	@Override
 	public List<YSummaryModel> selectSummaryList(SummaryParam summaryParam) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		List<YSummaryModel> summaryList = null;
+		Map<String, Object> map = new HashMap<>();
+		try{
+			map.put("mtTrend", summaryParam.getMtTrend());
+			map.put("history", this.getYesterdayDate());
+			
+			summaryList = sDbDao.getMapper(SSummaryDao.class).selectSummaryList(map);
+			
+			if (summaryList==null){
+				logger.info("SummaryYServiceImpl::selectSummaryList::Error = summaryList is null. trend = {}", summaryParam.getMtTrend());
+			}
+		}catch(Exception e){
+			logger.info("SummaryYServiceImpl::selectSummaryList::Error = {}", e.getMessage());
+		}
+		return summaryList;
+		
+		
 	}
 	
 	@Override
