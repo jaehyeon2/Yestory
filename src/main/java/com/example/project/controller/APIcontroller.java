@@ -83,13 +83,19 @@ public class APIcontroller {
 		logger.info("trendParam = {}", paramsMap.get("trend").toString());
 		logger.info("numberParam = {}", paramsMap.get("number").toString());
 		
+		ResponseModel response = new ResponseModel();
+		
 		SummaryParam summaryParam = new SummaryParam();
 		summaryParam.setMtTrend(paramsMap.get("trend").toString());
 		summaryParam.setNumber(paramsMap.get("number").toString());
 		
 		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
+		if (summary==null){
+			response = chatbotAPIService.getResponseOfTrend(requestParam);
+		}else{
+			response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
+		}
 		
-		ResponseModel response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
 		
 		
 		
