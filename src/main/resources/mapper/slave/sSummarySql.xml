@@ -15,6 +15,7 @@
 			m_summary
 		WHERE
 			history=#{history} AND
+			mt_trend=#{mtTrend} AND
 			mn_delete="0"
 		ORDER BY
 			mn_no
