@@ -102,7 +102,13 @@ public class APIcontroller {
 	@ResponseBody
 	public ResponseModel request_test(@RequestBody RequestParam requestParam) throws Exception{
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
-		logger.info("textParam = {}", paramsMap.get("textParam").toString());
+		
+		String textParam = paramsMap.get("textParam").toString();
+		logger.info("textParam = {}", textParam);
+		
+		if (textParam == null){
+			logger.error("APIController::request_test::Error = textParam is not exist!");
+		}
 		
 		ResponseModel response = null;
 		
