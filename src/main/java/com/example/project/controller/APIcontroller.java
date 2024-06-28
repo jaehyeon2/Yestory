@@ -96,4 +96,17 @@ public class APIcontroller {
 		
 		return response;
 	}
+	
+	//temp postMapping
+	@PostMapping(value={"/request_test"})
+	@ResponseBody
+	public ResponseModel request_test(@RequestBody RequestParam requestParam) throws Exception{
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		logger.info("textParam = {}", paramsMap.get("textParam").toString());
+		
+		ResponseModel response = null;
+		
+		response = chatbotAPIService.getResponseOfText(requestParam, "request_test");
+		return response;
+	}
 }
