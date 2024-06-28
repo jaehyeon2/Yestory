@@ -15,6 +15,7 @@
 			m_summary
 		WHERE
 			history=#{history} AND
+			mt_trend=#{mtTrend} AND
 			mn_delete="0"
 		ORDER BY
 			mn_no
@@ -22,19 +23,19 @@
 	
 	<select id="selectSummary" resultType="com.example.project.beans.model.YSummaryModel">
 		SELECT
-			
 			ms_url,
+			ms_title,
 			ms_summary
 		FROM
 			m_summary
 		WHERE
-			mt_rend=#{mtTrend} AND
+			mt_trend=#{mtTrend} AND
 			history=#{history} AND
-			mn_delete="0"
+			ms_delete="0"
 		ORDER BY
-			mn_no
+			ms_no
 		LIMIT
-			#{number}, 1 
+			#{number}, 1
 	</select>
 	
 </mapper>
