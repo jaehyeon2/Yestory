@@ -41,7 +41,7 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	private TrendYService trendYService;
 
 	@Override
-	public ResponseModel getResponseOfText(RequestParam requestParam) throws Exception {
+	public ResponseModel getResponseOfText(RequestParam requestParam, String responseText) throws Exception {
 
         // ResponseModel 객체 생성
         ResponseModel response = new ResponseModel();
@@ -49,7 +49,6 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	        
         	Map<String, Object> paramsMap = requestParam.getAction().getParams();
     		logger.info("paramsMap = ", paramsMap.toString());
-    		String responseText = "안녕하세요! 이것은 챗봇의 응답입니다.";
 
             // SimpleText 객체 생성 및 설정
             SimpleText simpleText = new SimpleText();
