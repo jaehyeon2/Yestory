@@ -161,9 +161,12 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	public RequestType getRequestType(String requestText) throws Exception{
 		RequestType requestType = RequestType.UNSPECIFIED;
 		
+		if (requestText==null || requestText.isEmpty() || requestText==""){
+			requestType = RequestType.ERROR;
+		}
 		if (requestText=="트렌드"){
 			requestType = RequestType.TREND;
-		}else if (requestText=="트렌드 디테일"){
+		}else if (requestText.contains("-")){
 			requestType = RequestType.TREND_DETAIL;
 		}else{
 			requestType = RequestType.UNKNOWN;

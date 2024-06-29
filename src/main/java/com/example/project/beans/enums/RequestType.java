@@ -4,7 +4,8 @@ public enum RequestType {
 	TREND("trend"),
 	TREND_DETAIL("trend_detail"),
 	UNSPECIFIED("unspecified"),
-	UNKNOWN("unknown")
+	UNKNOWN("unknown"),
+	ERROR("error"),
 	;
 	
 	private String typeName;

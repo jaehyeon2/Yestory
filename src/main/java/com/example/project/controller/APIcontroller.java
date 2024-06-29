@@ -108,15 +108,27 @@ public class APIcontroller {
 		logger.info("textParam = {}", textParam);
 		
 		ResponseModel response = null;
-		if (textParam == null){
-			logger.error("APIController::request_test::Error = textParam is not exist!");
-			response = chatbotAPIService.getResponseOfText(requestParam, "오류가 발생했습니다. 다시 입력해주세요.");
+		RequestType requestType = chatbotAPIService.getRequestType(textParam);
+		logger.info("APIController::request_test::RequestType = {}", requestType.getTypeName());
+		
+		switch(requestType){
+			case TREND:
+				response = chatbotAPIService.getResponseOfTrend(requestParam);
+				break;
+			case TREND_DETAIL:
+				response = chatbotAPIService.getResponseOfText(requestParam, "trend detail 1");
+				break;
+			case UNKNOWN:
+				response = chatbotAPIService.getResponseOfText(requestParam, "다시 입력해주세요.");
+				break;
+			case ERROR:
+				logger.error("APIController::request_test::Error = textParam is not exist!");
+				response = chatbotAPIService.getResponseOfText(requestParam, "오류가 발생했습니다. 다시 입력해주세요. 오류가 계속되는 경우 고객센터로 문의해주시기 바랍니다.");
+				break;
+			default:
+				break;	
 		}
 		
-		RequestType requestType = chatbotAPIService.getRequestType(textParam);
-		
-		
-		response = chatbotAPIService.getResponseOfText(requestParam, "request_test");
 		return response;
 	}
 }
