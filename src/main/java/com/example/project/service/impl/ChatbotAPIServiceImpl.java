@@ -162,6 +162,11 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 		RequestType requestType = RequestType.UNSPECIFIED;
 		
 		if (requestText=="트렌드"){
+			requestType = RequestType.TREND;
+		}else if (requestText=="트렌드 디테일"){
+			requestType = RequestType.TREND_DETAIL;
+		}else{
+			requestType = RequestType.UNKNOWN;
 		}
 		
 		return requestType;
