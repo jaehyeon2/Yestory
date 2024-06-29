@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.project.beans.enums.RequestType;
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.param.RequestParam;
@@ -106,11 +107,14 @@ public class APIcontroller {
 		String textParam = paramsMap.get("textParam").toString();
 		logger.info("textParam = {}", textParam);
 		
+		ResponseModel response = null;
 		if (textParam == null){
 			logger.error("APIController::request_test::Error = textParam is not exist!");
+			response = chatbotAPIService.getResponseOfText(requestParam, "오류가 발생했습니다. 다시 입력해주세요.");
 		}
 		
-		ResponseModel response = null;
+		RequestType requestType = chatbotAPIService.getRequestType(textParam);
+		
 		
 		response = chatbotAPIService.getResponseOfText(requestParam, "request_test");
 		return response;

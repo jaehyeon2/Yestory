@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.enums.RequestType;
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
@@ -155,6 +156,15 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	        response = this.getErrorMessage(); // 예외 처리 시 오류 응답 반환
 	    }
 	    return response;
+	}
+	
+	public RequestType getRequestType(String requestText) throws Exception{
+		RequestType requestType = RequestType.UNSPECIFIED;
+		
+		if (requestText=="트렌드"){
+		}
+		
+		return requestType;
 	}
 	
 	private ResponseModel getErrorMessage() throws Exception{
