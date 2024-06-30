@@ -66,7 +66,8 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 				
 				Document searchPageDoc = connection.get();
 	
-				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
+				//일반 기사, 연예 기사, 스포츠 기사 전부 linkElements에 저장
+				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com], a[href*=m.sports.naver.com], a[href*=m.entertain.naver.com]");
 				for (Element link: linkElements){
 					if (platformNumberList.size()>=5){
 						break;
