@@ -10,6 +10,7 @@
 			mn_title,
 			mn_content,
 			mn_url,
+			mn_type,
 			history
 		FROM
 			m_news
