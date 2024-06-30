@@ -63,17 +63,6 @@ public class APIcontroller {
         return response;
     }
 	
-	@GetMapping(value={"/summaryTest"})
-	public void summaryTest(@Valid SummaryParam summaryParam) throws Exception{
-		summaryParam.setMtTrend("소설가 정지돈");
-		summaryParam.setNumber("1");
-		
-		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
-		logger.info("APIController::summaryTest::mtTrend = {}", summary.getMtTrend());
-		logger.info("APIController::summaryTest::msTitle = {}", summary.getMsTitle());
-		logger.info("APIController::summaryTest::msSummary = {}", summary.getMsSummary());
-		
-	}
 	@PostMapping(value={"/summaryPost"})
 	@ResponseBody
 	public ResponseModel summaryPostRequest(@RequestBody RequestParam requestParam) throws Exception{
