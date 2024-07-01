@@ -123,7 +123,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	private void crawlingNaverNews(NewsParam newsParam) throws Exception{
 		
 		try{
-
+			
 			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getMnUrl());
 			
 			Connection connection = Jsoup.connect(newsParam.getMnUrl())
@@ -132,10 +132,27 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 
 			Thread.sleep(1000);
 			Document newsPageDoc = connection.get();
-			
-			String title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
-			String content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
-			
+			String title = null;
+			String content = null;
+			if (newsParam.getMnType().equals(NewsType.COMMON.getTypeName())){
+				logger.info("newsType = {}", newsParam.getMnType());
+				title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
+				content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
+			}else if(newsParam.getMnType().equals(NewsType.ENTERTAINMENT.getTypeName())){
+				logger.info("newsType = {}", newsParam.getMnType());
+				title = newsPageDoc.select("title").get(0).text().toString();
+//				content = newsPageDoc.select("div[class*=_article_content]").get(0).text().toString();
+				content = newsPageDoc.select("article[id*=comp_news_article]").get(0).text().toString();
+			}else if(newsParam.getMnType().equals(NewsType.SPORT.getTypeName())){
+				logger.info("newsType = {}", newsParam.getMnType());
+				title = newsPageDoc.select("title").get(0).text().toString();
+				logger.info("newsType2 = {}", newsParam.getMnType());
+				content = newsPageDoc.select("div[class*=_article_content]").get(0).text().toString();
+//				content = newsPageDoc.select("article[id*=comp_news_article]").get(0).text().toString();
+				logger.info("newsType3 = {}", newsParam.getMnType());
+			}
+			logger.info("title = {}", title);
+			logger.info("content = {}", content);
 			newsParam.setHistory(this.getYesterdayDate());
 			newsParam.setMnTitle(title);
 			newsParam.setMnContent(content);
