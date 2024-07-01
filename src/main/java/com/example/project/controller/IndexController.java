@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.project.service.NewsAPIService;
 import com.example.project.service.ProcessYService;
 
 @Controller
@@ -17,6 +18,9 @@ public class IndexController {
 	
 	@Autowired
 	private ProcessYService processYService;
+	
+	@Autowired
+	private NewsAPIService newsAPIservice;
 	
 	@GetMapping("/")
 	public String index() throws Exception{
@@ -34,5 +38,11 @@ public class IndexController {
 		logger.info("gptTest");
 		return "index";
 		
+	}
+	
+	@GetMapping("/naver")
+	public String naverTest() throws Exception{
+		newsAPIservice.test("이순재");
+		return "index";
 	}
 }
