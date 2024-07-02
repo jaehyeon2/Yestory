@@ -8,6 +8,7 @@ public class YSummaryModel extends BasicModel{
 	private String msTitle;
 	private String msSummary;
 	private String msUrl;
+	private String msType;
 	
 	public String getMtTrend() {
 		return mtTrend;
@@ -32,5 +33,11 @@ public class YSummaryModel extends BasicModel{
 	}
 	public void setMsUrl(String msUrl) {
 		this.msUrl = msUrl;
+	}
+	public String getMsType() {
+		return msType;
+	}
+	public void setMsType(String msType) {
+		this.msType = msType;
 	}
 }

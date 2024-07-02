@@ -2,11 +2,18 @@ package com.example.project.beans.param;
 
 public class NewsParam extends BasicParam{
 
+	private String mtTrend;
 	private String mnTitle;
 	private String mnContent;
 	private String mnUrl;
-	private String mtTrend;
+	private String mnType;
 	
+	public String getMtTrend() {
+		return mtTrend;
+	}
+	public void setMtTrend(String mtTrend) {
+		this.mtTrend = mtTrend;
+	}
 	public String getMnTitle() {
 		return mnTitle;
 	}
@@ -25,10 +32,10 @@ public class NewsParam extends BasicParam{
 	public void setMnUrl(String mnUrl) {
 		this.mnUrl = mnUrl;
 	}
-	public String getMtTrend() {
-		return mtTrend;
+	public String getMnType() {
+		return mnType;
 	}
-	public void setMtTrend(String mtTrend) {
-		this.mtTrend = mtTrend;
+	public void setMnType(String mnType) {
+		this.mnType = mnType;
 	}
 }

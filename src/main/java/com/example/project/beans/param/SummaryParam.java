@@ -6,6 +6,7 @@ public class SummaryParam extends BasicParam{
 	private String msTitle;
 	private String msSummary;
 	private String msUrl;
+	private String msType;
 	
 	public String getMtTrend() {
 		return mtTrend;
@@ -30,5 +31,11 @@ public class SummaryParam extends BasicParam{
 	}
 	public void setMsUrl(String msUrl) {
 		this.msUrl = msUrl;
+	}
+	public String getMsType() {
+		return msType;
+	}
+	public void setMsType(String msType) {
+		this.msType = msType;
 	}
 }

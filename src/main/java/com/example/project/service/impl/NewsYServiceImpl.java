@@ -28,6 +28,7 @@ public class NewsYServiceImpl extends BasicService implements NewsYService {
 			map.put("mnTitle", newsParam.getMnTitle());
 			map.put("mnContent", newsParam.getMnContent());
 			map.put("mnUrl", newsParam.getMnUrl());
+			map.put("mnType", newsParam.getMnType());
 			map.put("history", newsParam.getHistory());
 			
 			int result = mDbDao.getMapper(MNewsDao.class).insertNews(map);

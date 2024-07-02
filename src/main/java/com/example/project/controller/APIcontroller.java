@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.project.beans.enums.RequestType;
 import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.param.RequestParam;
@@ -62,17 +63,6 @@ public class APIcontroller {
         return response;
     }
 	
-	@GetMapping(value={"/summaryTest"})
-	public void summaryTest(@Valid SummaryParam summaryParam) throws Exception{
-		summaryParam.setMtTrend("소설가 정지돈");
-		summaryParam.setNumber("1");
-		
-		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
-		logger.info("APIController::summaryTest::mtTrend = {}", summary.getMtTrend());
-		logger.info("APIController::summaryTest::msTitle = {}", summary.getMsTitle());
-		logger.info("APIController::summaryTest::msSummary = {}", summary.getMsSummary());
-		
-	}
 	@PostMapping(value={"/summaryPost"})
 	@ResponseBody
 	public ResponseModel summaryPostRequest(@RequestBody RequestParam requestParam) throws Exception{
@@ -92,6 +82,40 @@ public class APIcontroller {
 			response = chatbotAPIService.getResponseOfTrend(requestParam);
 		}else{
 			response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
+		}
+		
+		return response;
+	}
+	
+	//temp postMapping
+	@PostMapping(value={"/request_test"})
+	@ResponseBody
+	public ResponseModel request_test(@RequestBody RequestParam requestParam) throws Exception{
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		
+		String textParam = paramsMap.get("textParam").toString();
+		logger.info("textParam = {}", textParam);
+		
+		ResponseModel response = null;
+		RequestType requestType = chatbotAPIService.getRequestType(textParam);
+		logger.info("APIController::request_test::RequestType = {}", requestType.getTypeName());
+		
+		switch(requestType){
+			case TREND:
+				response = chatbotAPIService.getResponseOfTrend(requestParam);
+				break;
+			case TREND_DETAIL:
+				response = chatbotAPIService.getResponseOfText(requestParam, "trend detail 1");
+				break;
+			case UNKNOWN:
+				response = chatbotAPIService.getResponseOfText(requestParam, "다시 입력해주세요.");
+				break;
+			case ERROR:
+				logger.error("APIController::request_test::Error = textParam is not exist!");
+				response = chatbotAPIService.getResponseOfText(requestParam, "오류가 발생했습니다. 다시 입력해주세요. 오류가 계속되는 경우 고객센터로 문의해주시기 바랍니다.");
+				break;
+			default:
+				break;	
 		}
 		
 		return response;
