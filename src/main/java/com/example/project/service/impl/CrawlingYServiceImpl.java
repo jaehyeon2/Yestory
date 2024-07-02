@@ -134,25 +134,19 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			Document newsPageDoc = connection.get();
 			String title = null;
 			String content = null;
+			logger.info("newsType = {}", newsParam.getMnType());
 			if (newsParam.getMnType().equals(NewsType.COMMON.getTypeName())){
-				logger.info("newsType = {}", newsParam.getMnType());
 				title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
 				content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
-			}else if(newsParam.getMnType().equals(NewsType.ENTERTAINMENT.getTypeName())){
-				logger.info("newsType = {}", newsParam.getMnType());
-				title = newsPageDoc.select("title").get(0).text().toString();
-//				content = newsPageDoc.select("div[class*=_article_content]").get(0).text().toString();
-				content = newsPageDoc.select("article[id*=comp_news_article]").get(0).text().toString();
 			}else if(newsParam.getMnType().equals(NewsType.SPORT.getTypeName())){
-				logger.info("newsType = {}", newsParam.getMnType());
-				title = newsPageDoc.select("title").get(0).text().toString();
-				logger.info("newsType2 = {}", newsParam.getMnType());
-				content = newsPageDoc.select("div[class*=_article_content]").get(0).text().toString();
-//				content = newsPageDoc.select("article[id*=comp_news_article]").get(0).text().toString();
-				logger.info("newsType3 = {}", newsParam.getMnType());
+//				title = newsPageDoc.select("title").get(0).text().toString();
+				title = newsParam.getMtTrend();
+				content = "스포츠 뉴스의 경우 내용 요약이 제공되지 않습니다.";
+			}else if(newsParam.getMnType().equals(NewsType.ENTERTAINMENT.getTypeName())){
+//				title = newsPageDoc.select("title").get(0).text().toString();
+				title = newsParam.getMtTrend();
+				content = "연예계 뉴스의 경우 내용 요약이 제공되지 않습니다.";
 			}
-			logger.info("title = {}", title);
-			logger.info("content = {}", content);
 			newsParam.setHistory(this.getYesterdayDate());
 			newsParam.setMnTitle(title);
 			newsParam.setMnContent(content);
