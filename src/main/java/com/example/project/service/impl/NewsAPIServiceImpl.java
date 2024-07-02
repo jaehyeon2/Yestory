@@ -14,7 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.model.NaverNewsResponse;
+import com.example.project.beans.model.newsResponse.News;
 import com.example.project.service.NewsAPIService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class NewsAPIServiceImpl implements NewsAPIService{
@@ -32,10 +35,11 @@ public class NewsAPIServiceImpl implements NewsAPIService{
 	
 	@Override
 	public void test(String trend) throws Exception{
-		String apiURL = NAVER_API_ENDPOINT_URL+URLEncoder.encode(trend, "UTF-8");
+		String apiURL = NAVER_API_ENDPOINT_URL+URLEncoder.encode(trend, "UTF-8")+"&startDate=20230101&endDate=20230131";
 		logger.info("apiURL = {}", apiURL);
         HttpURLConnection connection = null;
-        String responseBody = null;
+        StringBuffer responseBody = new StringBuffer();
+        BufferedReader br = null;
         try {
         	URL url = new URL(apiURL);
         	connection = (HttpURLConnection) url.openConnection();
@@ -45,16 +49,32 @@ public class NewsAPIServiceImpl implements NewsAPIService{
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                responseBody = readBody(connection.getInputStream());
+            	br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
             } else { // 오류 발생
-                responseBody = readBody(connection.getErrorStream());
+            	br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), "UTF-8"));
+            }
+            String inputLine;
+            
+            while ((inputLine = br.readLine()) != null) {
+                responseBody.append(inputLine);
             }
         } catch (IOException e) {
             throw new RuntimeException("API 요청과 응답 실패", e);
         } finally {
+        	br.close();
             connection.disconnect();
         }
-        logger.info("responseBody = {}", responseBody);
+        
+        ObjectMapper mapper = new ObjectMapper();
+        NaverNewsResponse newsResponse = mapper.readValue(responseBody.toString(), NaverNewsResponse.class);
+        logger.info("newsList");
+        for (News news : newsResponse.getItems()) {
+            System.out.println("Title: " + news.getTitle());
+            System.out.println("Link: " + news.getLink());
+            System.out.println("Description: " + news.getDescription());
+            System.out.println("PubDate: " + news.getPubDate());
+            System.out.println();
+        }
         
 		
 	}
