@@ -30,6 +30,7 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 			map.put("msTitle", summaryParam.getMsTitle());
 			map.put("msSummary", summaryParam.getMsSummary());
 			map.put("msUrl", summaryParam.getMsUrl());
+			map.put("msType", summaryParam.getMsType());
 			
 			int intResult = mDbDao.getMapper(MSummaryDao.class).insertSummary(map);
 			if (intResult<1){

@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.enums.NewsType;
 import com.example.project.beans.param.NewsParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.CrawlingYService;
@@ -66,14 +67,18 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 				
 				Document searchPageDoc = connection.get();
 	
-				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com]");
+				//일반 기사, 연예 기사, 스포츠 기사 전부 linkElements에 저장
+				Elements linkElements = searchPageDoc.select("a[href*=n.news.naver.com], a[href*=m.sports.naver.com], a[href*=m.entertain.naver.com]");
 				for (Element link: linkElements){
 					if (platformNumberList.size()>=5){
 						break;
 					}
 					String newsUrl = link.attr("href");
-					//연예, 스포츠 기사인 경우 로직 분리 필요
-					String platformNumber = this.getPlatformNumber(newsUrl);
+					
+					//뉴스 타입에 따른 private 로직 분리
+					NewsType newsType = this.distinguishType(newsUrl);
+					logger.info("newsType = {}", newsType.getTypeName());
+					String platformNumber = this.getPlatformNumber(newsUrl, newsType);
 					if (platformNumberList.contains(platformNumber)){
 						continue;
 					}
@@ -82,6 +87,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					NewsParam newsParam = new NewsParam();
 					newsParam.setMnUrl(newsUrl);
 					newsParam.setMtTrend(trend);
+					newsParam.setMnType(newsType.getTypeName());
 					newsParamList.add(newsParam);
 					
 				}
@@ -101,9 +107,15 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 		}
 	}
 	
-	private String getPlatformNumber(String url) throws Exception{
-		//url - https://n.news.naver.com/article/platformNumber/articleNumber
-		String platformNumber = url.split("/")[5];
+	private String getPlatformNumber(String url, NewsType newsType) throws Exception{
+		
+		String platformNumber = null;
+		if (newsType==NewsType.ENTERTAINMENT){
+			platformNumber = url.split("/")[4];
+		}else{
+			platformNumber = url.split("/")[5];
+		}
+		
 		return platformNumber;
 	}
 	
@@ -111,7 +123,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	private void crawlingNaverNews(NewsParam newsParam) throws Exception{
 		
 		try{
-
+			
 			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getMnUrl());
 			
 			Connection connection = Jsoup.connect(newsParam.getMnUrl())
@@ -120,10 +132,21 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 
 			Thread.sleep(1000);
 			Document newsPageDoc = connection.get();
-			
-			String title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
-			String content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
-			
+			String title = null;
+			String content = null;
+			logger.info("newsType = {}", newsParam.getMnType());
+			if (newsParam.getMnType().equals(NewsType.COMMON.getTypeName())){
+				title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
+				content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();
+			}else if(newsParam.getMnType().equals(NewsType.SPORT.getTypeName())){
+//				title = newsPageDoc.select("title").get(0).text().toString();
+				title = newsParam.getMtTrend();
+				content = "스포츠 뉴스의 경우 내용 요약이 제공되지 않습니다.";
+			}else if(newsParam.getMnType().equals(NewsType.ENTERTAINMENT.getTypeName())){
+//				title = newsPageDoc.select("title").get(0).text().toString();
+				title = newsParam.getMtTrend();
+				content = "연예계 뉴스의 경우 내용 요약이 제공되지 않습니다.";
+			}
 			newsParam.setHistory(this.getYesterdayDate());
 			newsParam.setMnTitle(title);
 			newsParam.setMnContent(content);
@@ -134,6 +157,24 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			logger.error("CrawlingServiceImpl::crawlingNaverNews::Error = {}", e.getMessage());
 			throw e;
 		}
+	}
+	
+	private NewsType distinguishType(String url) throws Exception{
+		NewsType type = null;
+		try{
+			if (url.contains("entertain")){
+				type = NewsType.ENTERTAINMENT;
+			}else if (url.contains("sports")){
+				type = NewsType.SPORT;
+			}else{
+				type = NewsType.COMMON;
+			}
+		}catch(Exception e){
+			logger.error("CrawlingYServiceImpl::distinguishType::Error = {}", e.getMessage());
+			throw e;
+		}
+		return type;
+		
 	}
 	
 }

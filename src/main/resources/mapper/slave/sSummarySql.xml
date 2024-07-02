@@ -8,8 +8,9 @@
 		SELECT
 			mt_trend,
 			ms_title,
-			ms_url,
 			ms_summary,
+			ms_url,
+			ms_type,
 			history
 		FROM
 			m_summary
@@ -25,7 +26,8 @@
 		SELECT
 			ms_url,
 			ms_title,
-			ms_summary
+			ms_summary,
+			ms_type
 		FROM
 			m_summary
 		WHERE

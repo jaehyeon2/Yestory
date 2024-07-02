@@ -9,7 +9,7 @@ public class YNewsModel extends BasicModel{
 	private String mnTitle;
 	private String mnContent;
 	private String mnUrl;
-	private String mnDate;
+	private String mnType;
 	
 	public String getMtTrend() {
 		return mtTrend;
@@ -41,10 +41,10 @@ public class YNewsModel extends BasicModel{
 	public void setMnUrl(String mnUrl) {
 		this.mnUrl = mnUrl;
 	}
-	public String getMnDate() {
-		return mnDate;
+	public String getMnType() {
+		return mnType;
 	}
-	public void setMnDate(String mnDate) {
-		this.mnDate = mnDate;
+	public void setMnType(String mnType) {
+		this.mnType = mnType;
 	}
 }
