@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import com.example.project.beans.enums.NewsType;
 import com.example.project.beans.model.YNewsModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.param.NewsParam;
@@ -76,20 +77,22 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 			summaryYService.deleteSummary(summaryParam);
 //			save new summary list
 			for (YNewsModel news:newsList){
-				newsParam.setHistory(history);
-				newsParam.setMnTitle(news.getMnTitle());
-				newsParam.setMnContent(news.getMnContent());
-				
-				String summary = gptYService.getGPTResponse(newsParam);
-				
+				if (news.getMnType().equals(NewsType.COMMON.getTypeName())){
+					newsParam.setHistory(history);
+					newsParam.setMnTitle(news.getMnTitle());
+					newsParam.setMnContent(news.getMnContent());
+					
+					summaryParam.setMsSummary(gptYService.getGPTResponse(newsParam));					
+				}else{
+					summaryParam.setMsSummary(news.getMnContent());
+				}
 				summaryParam.setMtTrend(news.getMtTrend());
 				summaryParam.setMsTitle(news.getMnTitle());
-				summaryParam.setMsSummary(summary);
 				summaryParam.setMsUrl(news.getMnUrl());
+				
 				summaryYService.insertSummary(summaryParam);
 			}
 			logger.info("ProcessYServiceImpl::executeProcess::info = serial process is successfully finish");
-			
 			
 		}catch(Exception e){
 			logger.error("ProcessYServiceImpl::executeProcess::Error = {}", e.getMessage());
