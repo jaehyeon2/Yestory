@@ -89,6 +89,7 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 				summaryParam.setMtTrend(news.getMtTrend());
 				summaryParam.setMsTitle(news.getMnTitle());
 				summaryParam.setMsUrl(news.getMnUrl());
+				summaryParam.setMsType(news.getMnType());
 				
 				summaryYService.insertSummary(summaryParam);
 			}
