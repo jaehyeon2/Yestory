@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -55,31 +56,19 @@ public class APIcontroller {
         return response;
     }
 	
-	@PostMapping(value={"/trendSummaryList"})
-	@ResponseBody
-	public ResponseModel trendSummaryList(@RequestBody RequestParam requestParam) throws Exception{
-		
-		Map<String, Object> paramsMap = requestParam.getAction().getParams();
-		logger.info("trendParam = {}", paramsMap.get("trend").toString());
-		logger.info("numberParam = {}", paramsMap.get("number").toString());
-		
-		ResponseModel response = new ResponseModel();
-		
-		SummaryParam summaryParam = new SummaryParam();
-		summaryParam.setMtTrend(paramsMap.get("trend").toString());
-		summaryParam.setNumber(paramsMap.get("number").toString());
-		
-		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
-		if (summary==null){
-			response = chatbotAPIService.getResponseOfTrend(requestParam);
-		}else{
-			response = chatbotAPIService.getResponseOfText(requestParam, summary.getMsSummary());
-		}
-		
-		response = chatbotAPIService.getResponseOfText(requestParam, "summaryTest");
-		
-		return response;
-	}
+//	@PostMapping(value={"/trendSummaryList"})
+//	@ResponseBody
+//	public ResponseModel trendSummaryList(@RequestBody RequestParam requestParam) throws Exception{
+//		
+//		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+//		logger.info("trendParam = {}", paramsMap.get("trend").toString());
+//		
+//		ResponseModel response = new ResponseModel();
+//		
+//		response = chatbotAPIService.getResponseOfBasicCard(requestParam, paramsMap.get("trend").toString());
+//		
+//		return response;
+//	}
 	
 	@PostMapping(value={"/summaryRequest"})
 	@ResponseBody

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project.beans.enums.RequestType;
+import com.example.project.beans.model.BasicModel;
 import com.example.project.beans.model.ResponseModel;
+import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
 import com.example.project.beans.model.response.template.output.basicCard.Carousel;
@@ -157,6 +159,48 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	    return response;
 	}
 	
+	@Override
+	public ResponseModel getResponseOfBasicCard(RequestParam requestParam, String keyword , String type) throws Exception{
+		ResponseModel response = new ResponseModel();
+	    try {
+	        TrendParam trendParam = new TrendParam();
+	        trendParam.setHistory(this.getYesterdayDate());
+	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
+	     
+	        Header header = new Header();
+	        header.setTitle(keyword);
+
+	        List<ListItem> items = new ArrayList<>();
+	        for (YTrendModel trend : trendList) {
+	            ListItem item = new ListItem();
+	            item.setTitle("트렌드");
+	            item.setDescription(trend.getMtTrend());
+	            items.add(item);
+	        }
+	        logger.info("itemsSize = {}", items.size());
+	        ListCard listCard = new ListCard();
+	        listCard.setHeader(header);
+	        listCard.setItems(items);
+
+	        OutputListCard output = new OutputListCard();
+	        output.setListCard(listCard);
+	        
+	        Template template = new Template();
+	        template.setOutputs(Collections.singletonList(output));
+
+	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
+	        response.setTemplate(template);
+	        ObjectMapper mapper = new ObjectMapper();
+	        String jsonString = mapper.writeValueAsString(response);
+	        logger.info(jsonString);
+	    } catch (Exception e) {
+	        logger.error("ChatbotAPIServiceImpl::getResponseOfTrendList::Error = {}", e.getMessage());
+	        response = this.getErrorMessage(); // 예외 처리 시 오류 응답 반환
+	    }
+	    return response;
+	}
+	
+	@Override
 	public RequestType getRequestType(String requestText) throws Exception{
 		RequestType requestType = RequestType.UNSPECIFIED;
 		
