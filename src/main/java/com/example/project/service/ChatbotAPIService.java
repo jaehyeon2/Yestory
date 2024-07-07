@@ -1,10 +1,7 @@
 package com.example.project.service;
 
-import java.util.List;
-
 import com.example.project.beans.enums.RequestType;
 import com.example.project.beans.model.ResponseModel;
-import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.param.RequestParam;
 
 public interface ChatbotAPIService {

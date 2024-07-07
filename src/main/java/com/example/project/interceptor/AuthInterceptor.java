@@ -41,7 +41,7 @@ public class AuthInterceptor implements HandlerInterceptor{
 		logger.info("pathInfo >>> " + pathInfo);
 
 		// True to create new session
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 
 //		try {
 //			// Get userInfo from session

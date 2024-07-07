@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.project.beans.enums.RequestType;
-import com.example.project.beans.model.BasicModel;
 import com.example.project.beans.model.ResponseModel;
-import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
 import com.example.project.beans.model.response.template.output.basicCard.Carousel;
