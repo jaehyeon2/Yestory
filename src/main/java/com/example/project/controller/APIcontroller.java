@@ -71,7 +71,7 @@ public class APIcontroller {
 		return response;
 	}
 	
-	@PostMapping(value={"/trend"})
+	@PostMapping(value={"/trendList"})
 	@ResponseBody
 	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
 		
