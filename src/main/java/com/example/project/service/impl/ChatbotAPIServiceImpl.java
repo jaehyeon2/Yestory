@@ -164,7 +164,7 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 		if (requestText==null || requestText.isEmpty() || requestText==""){
 			requestType = RequestType.ERROR;
 		}
-		if (requestText=="트렌드"){
+		if (requestText.equals("트렌드")){
 			requestType = RequestType.TREND;
 		}else if (requestText.contains("-")){
 			requestType = RequestType.TREND_DETAIL;
