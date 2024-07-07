@@ -80,13 +80,12 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
         ResponseModel response = new ResponseModel();
         try{
 	        
+        	List<BasicItem> items = new ArrayList<>();
+        	
 	        TrendParam trendParam = new TrendParam();
-	        
 	        trendParam.setHistory(this.getYesterdayDate());
-	        
 	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
 	
-	        List<BasicItem> items = new ArrayList<>();
 	        
 	        for (YTrendModel trend:trendList){
 	        	BasicItem item = new BasicItem();

@@ -45,9 +45,19 @@ public class APIcontroller {
 		return response;
 	}
 	
-	@PostMapping(value={"/summary"})
+	
+	@PostMapping(value={"/trendList"})
 	@ResponseBody
-	public ResponseModel summaryRequest(@RequestBody RequestParam requestParam) throws Exception{
+	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
+		
+		ResponseModel response = chatbotAPIService.getResponseOfTrendList(requestParam);
+
+        return response;
+    }
+	
+	@PostMapping(value={"/trendSummaryList"})
+	@ResponseBody
+	public ResponseModel trendSummaryList(@RequestBody RequestParam requestParam) throws Exception{
 		
 		Map<String, Object> paramsMap = requestParam.getAction().getParams();
 		logger.info("trendParam = {}", paramsMap.get("trend").toString());
@@ -70,15 +80,6 @@ public class APIcontroller {
 		
 		return response;
 	}
-	
-	@PostMapping(value={"/trendList"})
-	@ResponseBody
-	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
-		
-		ResponseModel response = chatbotAPIService.getResponseOfTrendList(requestParam);
-
-        return response;
-    }
 	
 	@PostMapping(value={"/summaryRequest"})
 	@ResponseBody
