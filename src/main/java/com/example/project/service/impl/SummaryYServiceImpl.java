@@ -87,7 +87,7 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 		try{
 			map.put("history", this.getYesterdayDate());
 			map.put("mtTrend", summaryParam.getMtTrend());
-			map.put("number", summaryParam.getNumber());
+			map.put("number", Integer.parseInt(summaryParam.getNumber()));
 			
 			summary = sDbDao.getMapper(SSummaryDao.class).selectSummary(map);
 			if (summary==null){
