@@ -12,23 +12,21 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.beans.enums.RequestType;
 import com.example.project.beans.model.ResponseModel;
+import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
 import com.example.project.beans.model.response.template.output.basicCard.Carousel;
 import com.example.project.beans.model.response.template.output.simpleText.SimpleText;
 import com.example.project.beans.model.response.template.output.basicCard.carousel.BasicItem;
-import com.example.project.beans.model.response.template.output.listCard.Header;
-import com.example.project.beans.model.response.template.output.listCard.ListCard;
-import com.example.project.beans.model.response.template.output.listCard.ListItem;
 import com.example.project.beans.model.response.template.outputType.OutputBasicCard;
-import com.example.project.beans.model.response.template.outputType.OutputListCard;
 import com.example.project.beans.model.response.template.outputType.OutputText;
 import com.example.project.beans.param.RequestParam;
+import com.example.project.beans.param.SummaryParam;
 import com.example.project.beans.param.TrendParam;
 import com.example.project.service.BasicService;
 import com.example.project.service.ChatbotAPIService;
+import com.example.project.service.SummaryYService;
 import com.example.project.service.TrendYService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPIService{
@@ -40,7 +38,10 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	
 	@Autowired
 	private TrendYService trendYService;
-
+	
+	@Autowired
+	private SummaryYService summaryYService;
+	
 	@Override
 	public ResponseModel getResponseOfText(RequestParam requestParam, String responseText) throws Exception {
 
@@ -68,13 +69,13 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
             response.setTemplate(template);
         }catch(Exception e){
         	logger.error("ChatbotAPIServiceImpl::getResponseOfTrend::Error = {}", e.getMessage());
-        	response = this.getErrorMessage();
+        	response = this.getResponseOfError("오류가 발생했습니다. 관리자에게 문의해주세요.");
         }
 		return response;
 	}
 	
 	@Override
-	public ResponseModel getResponseOfTrend(RequestParam requestParam) throws Exception {
+	public ResponseModel getResponseOfTrendList(RequestParam requestParam) throws Exception {
 
         // ResponseModel 객체 생성
         ResponseModel response = new ResponseModel();
@@ -85,7 +86,6 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	        TrendParam trendParam = new TrendParam();
 	        trendParam.setHistory(this.getYesterdayDate());
 	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
-	
 	        
 	        for (YTrendModel trend:trendList){
 	        	BasicItem item = new BasicItem();
@@ -111,94 +111,58 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 	        response.setTemplate(template);
         }catch(Exception e){
         	logger.error("ChatbotAPIServiceImpl::getResponseOfTrend::Error = {}", e.getMessage());
-        	response = this.getErrorMessage();
+        	response = this.getResponseOfError("오류가 발생했습니다. 관리자에게 문의해주세요.");
         }
 		return response;
 	}
 	
 	@Override
-	public ResponseModel getResponseOfTrendList(RequestParam requestParam) throws Exception {
-	    ResponseModel response = new ResponseModel();
-	    try {
-	        TrendParam trendParam = new TrendParam();
-	        trendParam.setHistory(this.getYesterdayDate());
-	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
-
-	        Header header = new Header();
-	        header.setTitle("트렌드 리스트");
-
-	        List<ListItem> items = new ArrayList<>();
-	        for (YTrendModel trend : trendList) {
-	            ListItem item = new ListItem();
-	            item.setTitle("트렌드");
-	            item.setDescription(trend.getMtTrend());
-	            items.add(item);
-	        }
-	        logger.info("itemsSize = {}", items.size());
-	        ListCard listCard = new ListCard();
-	        listCard.setHeader(header);
-	        listCard.setItems(items);
-
-	        OutputListCard output = new OutputListCard();
-	        output.setListCard(listCard);
-	        
-	        Template template = new Template();
-	        template.setOutputs(Collections.singletonList(output));
-
-	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-	        response.setTemplate(template);
-	        ObjectMapper mapper = new ObjectMapper();
-	        String jsonString = mapper.writeValueAsString(response);
-	        logger.info(jsonString);
-	    } catch (Exception e) {
-	        logger.error("ChatbotAPIServiceImpl::getResponseOfTrendList::Error = {}", e.getMessage());
-	        response = this.getErrorMessage(); // 예외 처리 시 오류 응답 반환
-	    }
-	    return response;
+	public ResponseModel getResponseOfSummary(RequestParam requestParam) throws Exception{
+		
+		Map<String, Object> paramsMap = requestParam.getAction().getParams();
+		
+		String summaryRequestStr = paramsMap.get("summaryParam").toString();
+		
+		if (!summaryRequestStr.contains("-")){
+			logger.error("ChatbotAPIServiceImpl::getResponseOfSummary::Error = unexpectedRequest. summaryStr = {}", summaryRequestStr);
+			return this.getResponseOfError("\"[트렌드]-[숫자]\"의 정확한 형식으로 입력해 주세요.\n하나의 트렌드 당 5개의 뉴스 요약이 제공됩니다.\n내용을 확인하려면 \'요약\'을 입력해주세요.");
+		}
+		
+		String[] summaryParamList = summaryRequestStr.split("-"); 
+		SummaryParam summaryParam = new SummaryParam();
+		summaryParam.setMtTrend(summaryParamList[0].trim());
+		summaryParam.setNumber(summaryParamList[1].trim());
+		summaryParam.setHistory(this.getYesterdayDate());
+		
+		YSummaryModel summary = summaryYService.selectSummary(summaryParam);
+		
+		//조회된 결과가 없는 경우
+		if (summary==null){
+			logger.error("ChatbotAPIServiceImpl::getResponseOfSummary::Error = summary is not exist. summary = {}, number = {}",
+					summaryParam.getMtTrend(), summaryParam.getNumber());
+			
+			StringBuilder trendListSb = new StringBuilder();
+			
+			TrendParam trendParam = new TrendParam();
+			trendParam.setHistory(this.getYesterdayDate());
+			
+			List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
+			
+			//트렌드 리스트 String
+			for (int index=1; index<=trendList.size(); index++){
+				trendListSb.append(index)
+					.append(": ")
+					.append(trendList.get(index).getMtTrend())
+					.append("\n");
+			}
+			
+			return this.getResponseOfText(requestParam, "해당 내용이 존재하지 않습니다.\n어제의 트렌드 리스트는 아래와 같습니다.\n\n"+trendListSb.toString()+"\n내용을 확인하려면 \'요약\'을 입력해주세요.");
+		}
+		
+		return this.getResponseOfText(requestParam, summary.getMsSummary());
+		
 	}
 	
-	@Override
-	public ResponseModel getResponseOfBasicCard(RequestParam requestParam, String keyword , String type) throws Exception{
-		ResponseModel response = new ResponseModel();
-	    try {
-	        TrendParam trendParam = new TrendParam();
-	        trendParam.setHistory(this.getYesterdayDate());
-	        List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
-	     
-	        Header header = new Header();
-	        header.setTitle(keyword);
-
-	        List<ListItem> items = new ArrayList<>();
-	        for (YTrendModel trend : trendList) {
-	            ListItem item = new ListItem();
-	            item.setTitle("트렌드");
-	            item.setDescription(trend.getMtTrend());
-	            items.add(item);
-	        }
-	        logger.info("itemsSize = {}", items.size());
-	        ListCard listCard = new ListCard();
-	        listCard.setHeader(header);
-	        listCard.setItems(items);
-
-	        OutputListCard output = new OutputListCard();
-	        output.setListCard(listCard);
-	        
-	        Template template = new Template();
-	        template.setOutputs(Collections.singletonList(output));
-
-	        response.setVersion(KAKAO_CHATBOT_SKILL_VERSION);
-	        response.setTemplate(template);
-	        ObjectMapper mapper = new ObjectMapper();
-	        String jsonString = mapper.writeValueAsString(response);
-	        logger.info(jsonString);
-	    } catch (Exception e) {
-	        logger.error("ChatbotAPIServiceImpl::getResponseOfTrendList::Error = {}", e.getMessage());
-	        response = this.getErrorMessage(); // 예외 처리 시 오류 응답 반환
-	    }
-	    return response;
-	}
-	
-	@Override
 	public RequestType getRequestType(String requestText) throws Exception{
 		RequestType requestType = RequestType.UNSPECIFIED;
 		
@@ -216,8 +180,9 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 		return requestType;
 	}
 	
-	private ResponseModel getErrorMessage() throws Exception{
-		String responseText = "오류가 발생했습니다.\n 지속적으로 오류가 발생할 경우 문의 바랍니다.";
+	private ResponseModel getResponseOfError(String errorMessage) throws Exception{
+		
+		String responseText = errorMessage;
 
         // ResponseModel 객체 생성
         ResponseModel response = new ResponseModel();
@@ -240,5 +205,6 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
         
 		return response;
 	}
+
 	
 }
