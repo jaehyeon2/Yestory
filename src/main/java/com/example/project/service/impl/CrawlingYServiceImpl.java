@@ -77,12 +77,10 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					
 					//뉴스 타입에 따른 private 로직 분리
 					NewsType newsType = this.distinguishType(newsUrl);
-					logger.info("newsType = {}", newsType.getTypeName());
 					String platformNumber = this.getPlatformNumber(newsUrl, newsType);
 					if (platformNumberList.contains(platformNumber)){
 						continue;
 					}
-					logger.info("platformNumber = {}", platformNumber);
 					platformNumberList.add(platformNumber);
 					NewsParam newsParam = new NewsParam();
 					newsParam.setMnUrl(newsUrl);
@@ -123,9 +121,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 	private void crawlingNaverNews(NewsParam newsParam) throws Exception{
 		
 		try{
-			
-			logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", newsParam.getMnUrl());
-			
+							
 			Connection connection = Jsoup.connect(newsParam.getMnUrl())
                     .userAgent(CRAWLING_NEWS_USER_AGENT)
                     .timeout(10000);
@@ -134,7 +130,6 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 			Document newsPageDoc = connection.get();
 			String title = null;
 			String content = null;
-			logger.info("newsType = {}", newsParam.getMnType());
 			if (newsParam.getMnType().equals(NewsType.COMMON.getTypeName())){
 				title = newsPageDoc.select("h2[id*=title_area]").get(0).text().toString();
 				content = newsPageDoc.select("article[id*=dic_area]").get(0).text().toString();

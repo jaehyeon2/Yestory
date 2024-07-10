@@ -127,6 +127,27 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		return true;
 	}
 
+	private void insertTrend(TrendParam trendParam) throws Exception{
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		try{
+			String history = this.getYesterdayDate();
+			map.put("mtTrend", trendParam.getMtTrend());
+			map.put("history", history);
+			
+			int intResult = mDbDao.getMapper(MTrendDao.class).insertTrend(map);
+			
+			if (intResult<1){
+				throw new Error("insertTrend error");
+			}
+			
+		}catch(Exception e){
+			logger.error("TrendYServiceImpl::insertTrend::Error = {}", e.getMessage());
+			throw e;
+		}
+	}
+	
 	private void generateTrendToCsv(String filePath) throws Exception {
 	    ProcessBuilder pb = new ProcessBuilder("python", GOOGLE_TREND_PYTHON_FILE_PATH, filePath);
 	    Process process = pb.start();
@@ -169,24 +190,4 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	    return trendList;
 	}
 	
-	private void insertTrend(TrendParam trendParam) throws Exception{
-		
-		Map<String, Object> map = new HashMap<>();
-		
-		try{
-			String history = this.getYesterdayDate();
-			map.put("mtTrend", trendParam.getMtTrend());
-			map.put("history", history);
-			
-			int intResult = mDbDao.getMapper(MTrendDao.class).insertTrend(map);
-			
-			if (intResult<1){
-				throw new Error("insertTrend error");
-			}
-			
-		}catch(Exception e){
-			logger.error("TrendYServiceImpl::insertTrend::Error = {}", e.getMessage());
-			throw e;
-		}
-	}
 }
