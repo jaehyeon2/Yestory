@@ -20,19 +20,16 @@ public class IndexController {
 	
 	@GetMapping("/")
 	public String index() throws Exception{
+		
 		return "index";
+		
 	}
 	
 	@GetMapping("/process")
 	public String process() throws Exception{
-		processYService.executeProcess();
-		return "index";
-	}
-	
-	@GetMapping("/gpt")
-	public String gptTest() throws Exception{
-		logger.info("gptTest");
-		return "index";
 		
+		processYService.executeProcess();
+		
+		return "index";
 	}
 }
