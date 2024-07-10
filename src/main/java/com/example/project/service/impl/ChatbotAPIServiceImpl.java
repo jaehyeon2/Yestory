@@ -177,8 +177,8 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 		
 		String[] summaryParamList = summaryRequestStr.split("-"); 
 		SummaryParam summaryParam = new SummaryParam();
-		summaryParam.setMtTrend(summaryParamList[0].trim());
-		summaryParam.setNumber(summaryParamList[1].trim());
+		summaryParam.setMtTrend(summaryParamList[0].replaceAll(" ", ""));
+		summaryParam.setNumber(summaryParamList[1].replaceAll(" ", ""));
 		summaryParam.setHistory(this.getYesterdayDate());
 		YSummaryModel summary = null;
 		
