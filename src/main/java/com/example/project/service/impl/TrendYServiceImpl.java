@@ -93,7 +93,11 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
 		Map<String, Object> map = new HashMap<>();
 		try{
-			map.put("history", trendParam.getHistory());
+			if (trendParam.getHistory()==null){
+				map.put("history", this.getYesterdayDate());
+			}else{
+				map.put("history", trendParam.getHistory());
+			}
 			
 			trendList = sDbDao.getMapper(STrendDao.class).selectTrendList(map);
 			if (trendList==null){

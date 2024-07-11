@@ -10,7 +10,12 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
+	
+	<!-- scheduler setting 
+	<task:annotation-driven/>
 
+    <bean id="scheduledTask" class="com.example.ScheduledTask"/>-->
+	
 	<!-- Application Properties	 -->
 	<context:property-placeholder location="classpath:application.properties" />
 
