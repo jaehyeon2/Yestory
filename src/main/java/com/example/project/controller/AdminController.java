@@ -10,9 +10,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.YestoryModel;
+import com.example.project.beans.param.SummaryParam;
 import com.example.project.beans.param.TrendParam;
+import com.example.project.service.SummaryYService;
 import com.example.project.service.TrendYService;
 
 import jakarta.validation.Valid;
@@ -25,6 +28,9 @@ public class AdminController {
 	
 	@Autowired
 	private TrendYService trendYService;
+	
+	@Autowired
+	private SummaryYService summaryYService;
 	
 	@GetMapping(value = {"/", "", "/index"})
 	public String adminIndex() throws Exception{
@@ -47,5 +53,18 @@ public class AdminController {
 		model.addAttribute("model", yestory);
 		return "admin/trend";
 	}
-
+	
+	@GetMapping(value = {"summary"})
+	public String adminSummary(@Valid SummaryParam summaryParam, ModelMap model) throws Exception{
+		
+		YestoryModel yestory = new YestoryModel();
+		
+		List<YSummaryModel> summaryList = summaryYService.selectSummaryList(summaryParam);
+		
+		yestory.setSummaryList(summaryList);
+		
+		model.addAttribute("model", yestory);
+		
+		return "admin/summary";
+	}
 }
