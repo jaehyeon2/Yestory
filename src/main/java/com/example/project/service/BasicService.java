@@ -20,7 +20,7 @@ public class BasicService {
 				LocalDate.now()
 				.minusDays(1)
 				.format(DateTimeFormatter
-						.ofPattern("yyyyMMdd"));
+						.ofPattern("yyyy-MM-dd"));
 		
 		return yesterdayString;
 	}

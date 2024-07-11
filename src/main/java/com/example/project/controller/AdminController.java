@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.project.beans.model.YTrendModel;
+import com.example.project.beans.model.YestoryModel;
 import com.example.project.beans.param.TrendParam;
 import com.example.project.service.TrendYService;
 
@@ -37,15 +38,13 @@ public class AdminController {
 	@GetMapping(value = {"trend"})
 	public String adminTrend(@Valid TrendParam trendParam, ModelMap model) throws Exception{
 		
-		List<YTrendModel> trendList = null;
+		YestoryModel yestory = new YestoryModel();
 		
-		if (trendParam.getHistory()!=null){
-			logger.info("history is null");
-		}
+		List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
 		
-		trendList = trendYService.selectTrendList(trendParam);
+		yestory.setTrendList(trendList);
 		
-		model.addAttribute("model", trendList);
+		model.addAttribute("model", yestory);
 		return "admin/trend";
 	}
 
