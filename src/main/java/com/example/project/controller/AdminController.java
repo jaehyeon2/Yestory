@@ -47,7 +47,9 @@ public class AdminController {
 		YestoryModel yestory = new YestoryModel();
 		
 		List<YTrendModel> trendList = trendYService.selectTrendList(trendParam);
-		
+		if (trendList==null){
+			logger.error("AdminController::adminTrend::Error = trendList is null");
+		}
 		yestory.setTrendList(trendList);
 		
 		model.addAttribute("model", yestory);
