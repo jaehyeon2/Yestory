@@ -25,7 +25,7 @@ public class APIcontroller {
 	@PostMapping(value={"/trendList"})
 	@ResponseBody
 	public ResponseModel trendRequest(@RequestBody RequestParam requestParam) throws Exception {
-		
+		logger.info("APIController::trendRequest::info = API-trendList");
 		ResponseModel response = chatbotAPIService.getResponseOfTrendList(requestParam);
 
         return response;
@@ -34,7 +34,7 @@ public class APIcontroller {
 	@PostMapping(value={"/summary"})
 	@ResponseBody
 	public ResponseModel summaryPostRequest(@RequestBody RequestParam requestParam) throws Exception{
-		
+		logger.info("APIController::summaryPostRequest::info = API-summary");
 		ResponseModel response = chatbotAPIService.getResponseOfSummary(requestParam);
 		
 		return response;
