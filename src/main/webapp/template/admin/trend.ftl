@@ -11,13 +11,13 @@
 			<td>트렌드명</td>
 			<td>history</td>
 		</tr>
-		<#-- <#list yestory.trendList as trend>
+		<#list model.trendList as trend>
 		<tr>
 			<td>1</td>
 			<td>${trend.mtTrend}</td>
 			<td>${trend.history}</td>
 		</tr>
-		</#list> -->
+		</#list>
 	</table>
 	</#if>
 </div>
