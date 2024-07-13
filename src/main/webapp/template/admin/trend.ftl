@@ -12,7 +12,7 @@
 			<td>history</td>
 		</tr>
 		<#list model.trendList as trend>
-		<tr>
+		<tr onClick="location.href='/admin/summary?mtTrend=${trend.mtTrend}&history=${trend.history}'">
 			<td>1</td>
 			<td>${trend.mtTrend}</td>
 			<td>${trend.history}</td>
