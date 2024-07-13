@@ -17,9 +17,9 @@
 		WHERE
 			history=#{history} AND
 			mt_trend=#{mtTrend} AND
-			mn_delete="0"
+			ms_delete="0"
 		ORDER BY
-			mn_no
+			ms_no
 	</select>
 	
 	<select id="selectSummary" resultType="com.example.project.beans.model.YSummaryModel">
