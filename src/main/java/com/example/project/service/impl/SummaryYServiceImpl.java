@@ -25,7 +25,7 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 		Map<String, Object> map = new HashMap<>();
 		try{
 			map.put("history", summaryParam.getHistory());
-			map.put("mtTrend", summaryParam.getMtTrend());
+			map.put("mtTrend", summaryParam.getMtTrend().replaceAll(" ", ""));
 			map.put("msTitle", summaryParam.getMsTitle());
 			map.put("msSummary", summaryParam.getMsSummary());
 			map.put("msUrl", summaryParam.getMsUrl());
@@ -64,7 +64,7 @@ public class SummaryYServiceImpl extends BasicService implements SummaryYService
 		List<YSummaryModel> summaryList = null;
 		Map<String, Object> map = new HashMap<>();
 		try{
-			map.put("mtTrend", summaryParam.getMtTrend());
+			map.put("mtTrend", summaryParam.getMtTrend().replaceAll(" ", ""));
 			map.put("history", this.getYesterdayDate());
 			
 			summaryList = sDbDao.getMapper(SSummaryDao.class).selectSummaryList(map);
