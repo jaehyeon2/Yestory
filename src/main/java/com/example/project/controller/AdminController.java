@@ -35,8 +35,6 @@ public class AdminController {
 	@GetMapping(value = {"/", "", "/index"})
 	public String adminIndex() throws Exception{
 		
-		
-		
 		return "admin/index";
 		
 	}
