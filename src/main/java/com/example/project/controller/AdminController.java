@@ -58,7 +58,6 @@ public class AdminController {
 	public String adminSummary(@Valid SummaryParam summaryParam, ModelMap model) throws Exception{
 		
 		YestoryModel yestory = new YestoryModel();
-		logger.info("");
 		List<YSummaryModel> summaryList = summaryYService.selectSummaryList(summaryParam);
 		
 		yestory.setSummaryList(summaryList);
