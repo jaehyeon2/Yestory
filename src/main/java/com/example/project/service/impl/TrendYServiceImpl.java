@@ -56,7 +56,10 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	        if (!new File(filePath).exists()){
 	        	logger.info("TrendYServiceImpl::getGoogleSearchTrendList::info = generate new csv file");
 	        	this.generateTrendToCsv(filePath);
+	        }else{
+	        	logger.info("TrendYServiceImpl::getGoogleSearchTrendList::info = csv file is exist!");
 	        }
+	        
 	        trendList = this.getTrendListFromCsv(filePath);
 	        
 	        this.insertTrendList(trendList);

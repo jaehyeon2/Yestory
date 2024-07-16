@@ -4,6 +4,11 @@
 
 <div class="p-5 mb-4 bg-body-tertiary rounded-3">
 <div class="container-fluid py-5">
+	<form action="/admin/trend" method="get">
+		<input type="date" name="history"/>
+		<button type="submit">조회</button>
+	</form>
+
 	<#if model??>
 	<table>
 		<tr>
