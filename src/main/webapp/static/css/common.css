@@ -1,4 +1,9 @@
 .trend_table .trend_tr .trend_td{
 	border: 1px solid black;
-  border-collapse: collapse;
+  	border-collapse: collapse;
+}
+
+.summary_table .summary_tr .summary_td{
+	border: 1px solid black;
+  	border-collapse: collapse;
 }
