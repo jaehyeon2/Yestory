@@ -10,17 +10,17 @@
 	</form>
 
 	<#if model??>
-	<table>
-		<tr>
-			<td>no.</td>
-			<td>트렌드명</td>
-			<td>history</td>
+	<table class="trend_table">
+		<tr class="trend_tr">
+			<td class="trend_td">no.</td>
+			<td class="trend_td">트렌드명</td>
+			<td class="trend_td">history</td>
 		</tr>
 		<#list model.trendList as trend>
-		<tr onClick="location.href='/admin/summary?mtTrend=${trend.mtTrend}&history=${trend.history}'">
-			<td>1</td>
-			<td>${trend.mtTrend}</td>
-			<td>${trend.history}</td>
+		<tr class="trend_tr" onClick="location.href='/admin/summary?mtTrend=${trend.mtTrend}&history=${trend.history}'">
+			<td class="trend_td">1</td>
+			<td class="trend_td">${trend.mtTrend}</td>
+			<td class="trend_td">${trend.history}</td>
 		</tr>
 		</#list>
 	</table>
