@@ -1,0 +1,4 @@
+wsl --install
+wsl --set-default-version 2
+
+docker login
