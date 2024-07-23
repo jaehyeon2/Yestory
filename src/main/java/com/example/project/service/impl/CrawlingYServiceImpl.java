@@ -57,7 +57,7 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 						.append(CRAWLING_NEWS_URL_END).append(todayString)
 						.toString();
 	
-				logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
+//				logger.info("CrawlingServiceImpl::crawlingNaverSearchNewsLink::Url = {}", url);
 				
 				Connection connection = Jsoup.connect(url)
                         .userAgent(CRAWLING_NEWS_USER_AGENT)
@@ -93,7 +93,6 @@ public class CrawlingYServiceImpl extends BasicService implements CrawlingYServi
 					break;
 				}
 			}
-			logger.info("newsParamListSize = {}", newsParamList.size());
 			
 			for(NewsParam newsParam:newsParamList){
 				this.crawlingNaverNews(newsParam);

@@ -5,12 +5,9 @@
 <div class="container-fluid">
 	<ul>
 		<li>
-			<a href="/GPT">test link</a>
+			<a href="/admin">admin</a>
 		</li>
-		<li>
-			<a href="/naver-datalab">datalab temp</a>
-		</li>
-  </ul>
+  	</ul>
   
 </div>
 </nav>

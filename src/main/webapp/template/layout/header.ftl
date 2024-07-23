@@ -11,5 +11,6 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
 	<link rel="stylesheet" href="/static/libs/bootstrap-5.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/common.css">
 	header
 </head>

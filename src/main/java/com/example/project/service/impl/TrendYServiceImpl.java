@@ -56,7 +56,10 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 	        if (!new File(filePath).exists()){
 	        	logger.info("TrendYServiceImpl::getGoogleSearchTrendList::info = generate new csv file");
 	        	this.generateTrendToCsv(filePath);
+	        }else{
+	        	logger.info("TrendYServiceImpl::getGoogleSearchTrendList::info = csv file is exist!");
 	        }
+	        
 	        trendList = this.getTrendListFromCsv(filePath);
 	        
 	        this.insertTrendList(trendList);
@@ -93,7 +96,11 @@ final Logger logger = LoggerFactory.getLogger(this.getClass());
 		
 		Map<String, Object> map = new HashMap<>();
 		try{
-			map.put("history", trendParam.getHistory());
+			if (trendParam.getHistory()==null){
+				map.put("history", this.getYesterdayDate());
+			}else{
+				map.put("history", trendParam.getHistory());
+			}
 			
 			trendList = sDbDao.getMapper(STrendDao.class).selectTrendList(map);
 			if (trendList==null){

@@ -46,9 +46,12 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 	
 	@Override
 	public void executeProcess() throws Exception{
-		String history=this.getYesterdayDate();
 		
 		try{
+			logger.info("ProcessYServiceImpl::executeProcess::info = serial process is start");
+			
+			String history=this.getYesterdayDate();
+			
 			TrendParam trendParam = new TrendParam();
 			trendParam.setHistory(history);
 			
@@ -65,7 +68,6 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 			newsYService.deleteNews(newsParam);
 //			save new news list
 			for (YTrendModel trend:trendList){
-				logger.info("trend = {}", trend);
 				crawlingYService.crawlingNaverNewsList(trend.getMtTrend());
 			}
 			
@@ -93,8 +95,8 @@ public class ProcessYServiceImpl extends BasicService implements ProcessYService
 				
 				summaryYService.insertSummary(summaryParam);
 			}
-			logger.info("ProcessYServiceImpl::executeProcess::info = serial process is successfully finish");
 			
+			logger.info("ProcessYServiceImpl::executeProcess::info = serial process is successfully finish");
 		}catch(Exception e){
 			logger.error("ProcessYServiceImpl::executeProcess::Error = {}", e.getMessage());
 		}
