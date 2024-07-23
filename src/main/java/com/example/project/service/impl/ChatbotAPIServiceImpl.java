@@ -15,13 +15,10 @@ import com.example.project.beans.model.ResponseModel;
 import com.example.project.beans.model.YSummaryModel;
 import com.example.project.beans.model.YTrendModel;
 import com.example.project.beans.model.response.Template;
-import com.example.project.beans.model.response.template.output.basicCard.Carousel;
 import com.example.project.beans.model.response.template.output.simpleText.SimpleText;
-import com.example.project.beans.model.response.template.output.basicCard.carousel.BasicItem;
 import com.example.project.beans.model.response.template.output.listCard.Header;
 import com.example.project.beans.model.response.template.output.listCard.ListCard;
 import com.example.project.beans.model.response.template.output.listCard.ListItem;
-import com.example.project.beans.model.response.template.outputType.OutputBasicCard;
 import com.example.project.beans.model.response.template.outputType.OutputListCard;
 import com.example.project.beans.model.response.template.outputType.OutputText;
 import com.example.project.beans.param.RequestParam;
@@ -177,8 +174,8 @@ public class ChatbotAPIServiceImpl extends BasicService implements ChatbotAPISer
 		
 		String[] summaryParamList = summaryRequestStr.split("-"); 
 		SummaryParam summaryParam = new SummaryParam();
-		summaryParam.setMtTrend(summaryParamList[0].trim());
-		summaryParam.setNumber(summaryParamList[1].trim());
+		summaryParam.setMtTrend(summaryParamList[0].replaceAll(" ", ""));
+		summaryParam.setNumber(summaryParamList[1].replaceAll(" ", ""));
 		summaryParam.setHistory(this.getYesterdayDate());
 		YSummaryModel summary = null;
 		
