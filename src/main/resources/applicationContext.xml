@@ -34,5 +34,13 @@
 	<import resource="classpath:spring/mysql.xml"/>
 	<import resource="classpath:spring/dao.xml"/>
 	
+	
+	<!-- scheduler setting -->
+	<!-- <task:annotation-driven scheduler="scheduler"><task:annotation-driven/>
+	<task:scheduler id="scheduler" pool-size="10"/>
 
+	<task:scheduled-tasks>
+	    <task:scheduled ref="cronTest" method="test" cron="0/5 * * * * ?"/>
+	</task:scheduled-tasks> -->
+	
 </beans>
