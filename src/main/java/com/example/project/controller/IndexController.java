@@ -27,9 +27,10 @@ public class IndexController {
 	}
 	
 	@GetMapping("/process")
-	@Scheduled(cron = "0 10 0 * * ?")
+	@Scheduled(cron = "0 37 21 * * ?")
 	public String process() throws Exception{
 		
+		logger.info("process test");
 		processYService.executeProcess();
 		
 		return "index";
